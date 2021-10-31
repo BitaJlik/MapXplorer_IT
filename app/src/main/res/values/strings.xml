@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">MarketXplorer</string>
+    <string name="app_name">ShowMeMoreShopping</string>
     <string name="title_activity_maps">MapsActivity</string>
-    <string name="click">Вход</string>
+    <string name="click">Try</string>
     <string name="back">Назад</string>
+    <string name="search">Search</string>
+    <string name="add">Add</string>
+    <string name="input_place">Input place</string>
+    <string name="map_id">e8af58fabd2b5482</string>
 </resources>

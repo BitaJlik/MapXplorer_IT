@@ -4,6 +4,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.animation.LayoutTransition;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,6 +17,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
+
+import java.lang.annotation.Target;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -51,7 +56,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng vinnitsa = new LatLng(49.2344160049607, 28.411152669550056);
         mMap.addMarker(new MarkerOptions().position(vinnitsa).title("Тута ВНТУ"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vinnitsa,16.0f));
-
-
+        g = googleMap;
+    }
+    private Object g ;
+    public void addMarket(View view) {
+        GoogleMap googleMap = (GoogleMap) g;
+        googleMap.addMarker(new MarkerOptions().position(googleMap.getCameraPosition().target));
+        System.out.println("Added" + googleMap.getCameraPosition().target.latitude +"\t"+ googleMap.getCameraPosition().target.longitude);
+    }
+    public void search(View view) {
+        GoogleMap googleMap = (GoogleMap) g;
     }
 }
