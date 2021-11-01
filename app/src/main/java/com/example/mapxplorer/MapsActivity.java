@@ -1,26 +1,32 @@
 package com.example.mapxplorer;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.animation.LayoutTransition;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
 
 import java.lang.annotation.Target;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
@@ -39,32 +45,72 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
         LatLng vinnitsa = new LatLng(49.2344160049607, 28.411152669550056);
         mMap.addMarker(new MarkerOptions().position(vinnitsa).title("Тута ВНТУ"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vinnitsa,16.0f));
         g = googleMap;
+        mMap.setOnCircleClickListener(this);
+        if(!DataBase.markets.isEmpty()){
+            for(Market market : DataBase.markets){
+
+                googleMap.addCircle(
+                        new CircleOptions().center(
+                        new LatLng(
+                                market.getLatitude(),
+                                market.getLongitude())).
+                        radius(10.0).
+                        fillColor(Color.BLUE).
+                        strokeColor(Color.RED).
+                        strokeWidth(5).
+                        clickable(true));
+
+
+            }
+        }
     }
     private Object g ;
+    @Override
+    public void onCircleClick(@NonNull Circle circle) {
+        for(Market market : DataBase.markets){
+            if(market.getLatitude() == circle.getCenter().latitude &&
+               market.getLongitude() == circle.getCenter().longitude){
+                Toast.makeText(this,market.getNameMarket() + circle.getCenter().latitude,Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
     public void addMarket(View view) {
         GoogleMap googleMap = (GoogleMap) g;
-        googleMap.addMarker(new MarkerOptions().position(googleMap.getCameraPosition().target));
-        System.out.println("Added" + googleMap.getCameraPosition().target.latitude +"\t"+ googleMap.getCameraPosition().target.longitude);
+        double latitude = googleMap.getCameraPosition().target.latitude;
+        double longitude = googleMap.getCameraPosition().target.longitude;
+
+        googleMap.addCircle(
+                new CircleOptions().center(
+                        new LatLng(latitude,longitude)).
+                        radius(10.0).
+                        fillColor(Color.BLUE).
+                        strokeColor(Color.RED).
+                        strokeWidth(5).
+                        clickable(true));
+        System.out.println("Added " + latitude +"\t"+ longitude);
+        DataBase.markets.add(
+                new Market("Market",latitude,longitude));
     }
     public void search(View view) {
-        GoogleMap googleMap = (GoogleMap) g;
+        String finding = "";
+        for(Market market : DataBase.markets ){
+            if(finding.equals(market.getNameMarket())){
+                ((GoogleMap) g).moveCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(market.getLatitude(),market.getLongitude()),16.0f));
+            }
+            System.out.println("\n"+market.toString());
+        }
     }
+
+
 }

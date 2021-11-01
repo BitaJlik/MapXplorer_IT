@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MapXplorer">
         <activity
+            android:name=".MarketShowProducts"
+            android:exported="false" />
+        <activity
             android:name=".MapsActivity"
             android:exported="false" />
         <!--
