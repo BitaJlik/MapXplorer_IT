@@ -8,6 +8,9 @@
     <string name="input_place">Input place</string>
     <string name="map_id">e8af58fabd2b5482</string>
     <string name="testing_soon">Testing soon</string>
+    <string name="edit">Edit</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
 
 
 </resources>

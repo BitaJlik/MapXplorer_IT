@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ public class MarketShowProducts extends AppCompatActivity  {
     private TextView text ;
     private ListView listView;
     private SimpleAdapter adapter;
+    private Button edit;
+    private  Market market;
    @SuppressLint("SetTextI18n")
    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,9 @@ public class MarketShowProducts extends AppCompatActivity  {
 
         text = findViewById(R.id.texted);
         listView = findViewById(R.id.list);
-        Market market = DataBase.markets.get(DataBase.id);
+        edit = findViewById(R.id.button);
+
+        market = DataBase.markets.get(DataBase.id);
         if(!market.getProducts().isEmpty())
             text.setText(market.getNameMarket());
         else text.setText(market.getNameMarket() + "   -> Пусто");
@@ -53,5 +58,12 @@ public class MarketShowProducts extends AppCompatActivity  {
         });
         listView.setAdapter(adapter);
 
+    }
+
+    public void edit(View view) {
+       if(!market.getProducts().isEmpty()) {
+           market.getProducts().get(0).setAmount(market.getProducts().get(0).getAmount() + 1);
+       }
+       finish();
     }
 }
