@@ -9,13 +9,16 @@
     <TextView
         android:id="@+id/texted"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="15pt"
-        android:layout_margin="20dp"
-        android:text="@string/testing_soon" />
+        android:layout_height="63dp"
+        android:layout_margin="10dp"
+        android:text="@string/testing_soon"
+        android:textSize="15pt" />
 
-
-
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="606dp"
+        android:layout_marginTop="100dp" />
 
 
 </FrameLayout>
