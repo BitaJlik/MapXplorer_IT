@@ -55,5 +55,6 @@ public class MarketShowProducts extends AppCompatActivity  {
            Intent intent = new Intent(this,Edit.class);
            startActivity(intent);
        }
+       finish();
     }
 }

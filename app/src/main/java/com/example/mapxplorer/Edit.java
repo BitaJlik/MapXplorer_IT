@@ -1,8 +1,8 @@
 package com.example.mapxplorer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -21,7 +21,7 @@ public class Edit extends AppCompatActivity {
     RadioButton radioProduct;
     RadioButton radioPrice;
     RadioButton radioAmount;
-    private int pos;
+    private int pos = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +53,22 @@ public class Edit extends AppCompatActivity {
             pos = position;
         });
         listView.setAdapter(adapter);
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if(radioProduct.isChecked()){
+                input.setText(market.getProducts().get(pos).getNameProduct());
+            }
+            else if(radioPrice.isChecked()) {
+                input.setText(String.valueOf(market.getProducts().get(pos).getPrice()));
+            }
+            else if(radioAmount.isChecked()) {
+                input.setText(String.valueOf(market.getProducts().get(pos).getAmount()));
+            }
+        });
 
     }
     public void edit(View view){
         System.out.println("+++" + input.getText().toString());
-       
+
             if(radioProduct.isChecked()){
                 market.getProducts().get(pos).setNameProduct(input.getText().toString());
             }
@@ -68,5 +79,7 @@ public class Edit extends AppCompatActivity {
                 market.getProducts().get(pos).setAmount(Integer.parseInt(input.getText().toString()));
             }
             finish();
+        Intent intent = new Intent(this,MarketShowProducts.class);
+        startActivity(intent);
     }
 }

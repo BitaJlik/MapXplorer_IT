@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ShowMeMoreShops</string>
-    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_maps">Xplorer</string>
     <string name="click">Try</string>
     <string name="back">Назад</string>
     <string name="search">Search</string>
