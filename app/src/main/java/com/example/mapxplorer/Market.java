@@ -2,8 +2,6 @@ package com.example.mapxplorer;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import java.util.ArrayList;
 
 public class Market {

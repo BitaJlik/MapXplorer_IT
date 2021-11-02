@@ -24,7 +24,5 @@ public class DataBase {
         markets.get(0).getProducts().add(new Product("Сосиски мисливські",30,2));
         markets.get(0).getProducts().add(new Product("Живчик 2Л",30,2));
 
-//        markets.add(new Market("Магазин",49.23114320346306, 28.406530458796375));
-//        markets.add(new Market("Абт",49.23164320346306, 28.406530458796375));
     }
 }
