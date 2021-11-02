@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,12 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 
 public class MarketShowProducts extends AppCompatActivity  {
     private TextView text ;
     private ListView listView;
-    private ArrayAdapter<CharSequence> adapter;
+    private SimpleAdapter adapter;
    @SuppressLint("SetTextI18n")
    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +33,25 @@ public class MarketShowProducts extends AppCompatActivity  {
         if(!market.getProducts().isEmpty())
             text.setText(market.getNameMarket());
         else text.setText(market.getNameMarket() + "   -> Пусто");
-       ArrayList<String> arrayList = new ArrayList<>();
+       ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
+       HashMap<String, String> map;
         for(Product product : market.getProducts()){
-            arrayList.add(product.getNameProduct() + "   "+product.getAmount()+"шт     " +product.getPrice() +" Грн");
+            map = new HashMap<>();
+            map.put("Product",product.getNameProduct() );
+            map.put("Price",  product.getAmount()+"шт     " +product.getPrice() +" Грн");
+            arrayList.add(map);
         }
-        String[] strings = new String[arrayList.size()];
-        for(int i = 0;i< arrayList.size();i++){
-            strings[i] = arrayList.get(i);
-        }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, strings);
+
+        adapter = new SimpleAdapter(this, arrayList, android.R.layout.simple_list_item_2,
+               new String[]{"Product", "Price"},
+               new int[]{android.R.id.text1, android.R.id.text2});
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 System.out.println("+++" + arrayList.get(position));
-                print(arrayList,position);
             }
         });
         listView.setAdapter(adapter);
 
-    }
-    private void print(ArrayList<String> a, int pos){
-       Toast.makeText(this,a.get(pos),Toast.LENGTH_SHORT).show();
     }
 }
