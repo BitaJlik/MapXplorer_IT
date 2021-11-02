@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.animation.LayoutTransition;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -75,11 +76,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Object g ;
     @Override
     public void onCircleClick(@NonNull Circle circle) {
+        int i=0;
         for(Market market : DataBase.markets){
+
             if(market.getLatitude() == circle.getCenter().latitude &&
                market.getLongitude() == circle.getCenter().longitude){
                 Toast.makeText(this,market.getNameMarket() + circle.getCenter().latitude,Toast.LENGTH_SHORT).show();
+                DataBase.id = i;
+                Intent intent = new Intent(this, MarketShowProducts.class);
+                startActivity(intent);
             }
+            i++;
         }
 
     }
