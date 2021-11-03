@@ -87,7 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.addCircle(
                 new CircleOptions().center(
                         new LatLng(latitude,longitude)).
-                        radius(10.0).
+                        radius(12.0).
                         fillColor(Color.BLUE).
                         strokeColor(Color.RED).
                         strokeWidth(5).
