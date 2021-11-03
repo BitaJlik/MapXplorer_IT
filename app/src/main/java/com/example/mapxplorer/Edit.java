@@ -59,22 +59,29 @@ public class Edit extends AppCompatActivity {
         });
         listView.setAdapter(adapter);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            if(radioProduct.isChecked()){
-                input.setText(market.getProducts().get(pos).getNameProduct());
-            }
-            else if(radioPrice.isChecked()) {
-                input.setText(String.valueOf(market.getProducts().get(pos).getPrice()));
-            }
-            else if(radioAmount.isChecked()) {
-                input.setText(String.valueOf(market.getProducts().get(pos).getAmount()));
-            }
-            else if(radioMarket.isChecked()){
+            if(radioMarket.isChecked()){
                 input.setText(market.getNameMarket());
             }
+            else input.setText("");
+            if (!market.getProducts().isEmpty()) {
+                if(radioProduct.isChecked()){
+                    input.setText(market.getProducts().get(pos).getNameProduct());
+                }
+                else if(radioPrice.isChecked()) {
+                    input.setText(String.valueOf(market.getProducts().get(pos).getPrice()));
+                }
+                else if(radioAmount.isChecked()) {
+                    input.setText(String.valueOf(market.getProducts().get(pos).getAmount()));
+                }
+            }
+
         });
 
     }
     public void edit(View view){
+            if(market.getProducts().isEmpty()){
+                return;
+            }
             if(radioProduct.isChecked()){
                 market.getProducts().get(pos).setNameProduct(input.getText().toString());
             }
@@ -92,6 +99,9 @@ public class Edit extends AppCompatActivity {
         startActivity(intent);
     }
     public void add(View view){
+        if(input.getText().toString().equals("")){
+            return;
+        }
         if(radioProduct.isChecked()){
             market.getProducts().add(new Product(input.getText().toString(),0,0));
         }
@@ -106,6 +116,9 @@ public class Edit extends AppCompatActivity {
         startActivity(intent);
     }
     public void delete(View view){
+        if(market.getProducts().isEmpty()){
+            return;
+        }
         Intent intent = new Intent(this,MarketShowProducts.class);
         if(radioMarket.isChecked()){
             DataBase.markets.remove(DataBase.id);

@@ -39,7 +39,6 @@ public class DataBase {
         markets.get(1).getProducts().add(new Product("Риба",50,2));
 
         markets.get(3).getProducts().add(new Product("Філе",120,5));
-
         markets.get(3).getProducts().add(new Product("Філе2",150,15));
 
 
