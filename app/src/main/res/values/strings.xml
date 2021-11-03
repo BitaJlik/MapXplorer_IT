@@ -7,13 +7,20 @@
     <string name="add">Add</string>
     <string name="input_place">Input place</string>
     <string name="map_id">e8af58fabd2b5482</string>
-    <string name="testing_soon">Testing soon</string>
+    <string name="testing_soon">Market</string>
     <string name="edit">Edit</string>
     <string name="login">Login</string>
     <string name="password">Password</string>
     <string name="product">Product</string>
     <string name="price">Price</string>
     <string name="amount">Amount</string>
+    <string name="img">img</string>
+    <string name="delete">delete</string>
+    <string name="name_market">Name Market</string>
+    <string name="search_this">Search this</string>
+    <string name="sort_by_price">Price</string>
+    <string name="sort_by_amount">Amount</string>
+    <string name="sort_by_name">Name</string>
 
 
 </resources>

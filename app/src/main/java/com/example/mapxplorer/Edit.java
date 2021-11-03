@@ -21,6 +21,7 @@ public class Edit extends AppCompatActivity {
     RadioButton radioProduct;
     RadioButton radioPrice;
     RadioButton radioAmount;
+    RadioButton radioMarket;
     private int pos = 0;
 
     @Override
@@ -34,6 +35,7 @@ public class Edit extends AppCompatActivity {
         radioProduct = findViewById(R.id.radioProduct);
         radioPrice = findViewById(R.id.radioPrice);
         radioAmount = findViewById(R.id.radioAmount);
+        radioMarket = findViewById(R.id.radioMarket);
 
         input = findViewById(R.id.editInput);
 
@@ -51,6 +53,9 @@ public class Edit extends AppCompatActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             System.out.println("+++" + arrayList.get(position));
             pos = position;
+            input.setText(market.getProducts().get(pos).getNameProduct());
+            radioGroup.clearCheck();
+            radioProduct.setChecked(true);
         });
         listView.setAdapter(adapter);
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -63,12 +68,13 @@ public class Edit extends AppCompatActivity {
             else if(radioAmount.isChecked()) {
                 input.setText(String.valueOf(market.getProducts().get(pos).getAmount()));
             }
+            else if(radioMarket.isChecked()){
+                input.setText(market.getNameMarket());
+            }
         });
 
     }
     public void edit(View view){
-        System.out.println("+++" + input.getText().toString());
-
             if(radioProduct.isChecked()){
                 market.getProducts().get(pos).setNameProduct(input.getText().toString());
             }
@@ -78,8 +84,37 @@ public class Edit extends AppCompatActivity {
             else if(radioAmount.isChecked()) {
                 market.getProducts().get(pos).setAmount(Integer.parseInt(input.getText().toString()));
             }
+            else if(radioMarket.isChecked()){
+                market.setNameMarket(input.getText().toString());
+            }
             finish();
         Intent intent = new Intent(this,MarketShowProducts.class);
+        startActivity(intent);
+    }
+    public void add(View view){
+        if(radioProduct.isChecked()){
+            market.getProducts().add(new Product(input.getText().toString(),0,0));
+        }
+        else if(radioPrice.isChecked()) {
+            market.getProducts().add(new Product("",Double.parseDouble(input.getText().toString()),0));
+        }
+        else if(radioAmount.isChecked()) {
+            market.getProducts().add(new Product("",0,Integer.parseInt(input.getText().toString())));
+        }
+        finish();
+        Intent intent = new Intent(this,MarketShowProducts.class);
+        startActivity(intent);
+    }
+    public void delete(View view){
+        Intent intent = new Intent(this,MarketShowProducts.class);
+        if(radioMarket.isChecked()){
+            DataBase.markets.remove(DataBase.id);
+            intent = new Intent(this,MapsActivity.class);
+        }
+        else {
+            market.getProducts().remove(pos);
+        }
+        finish();
         startActivity(intent);
     }
 }

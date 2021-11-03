@@ -1,49 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:alpha="1"
     android:windowSoftInputMode="adjustPan"
-    tools:context=".MarketShowProducts">
-
+    tools:context=".Edit">
 
     <ListView
         android:id="@+id/listEdit"
         android:layout_width="match_parent"
         android:layout_height="450dp"
-        />
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+
+    </ListView>
 
     <EditText
         android:id="@+id/editInput"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="550dp"
+        android:layout_marginStart="91dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="91dp"
+        android:layout_marginBottom="14dp"
         android:ems="10"
-        android:windowSoftInputMode="adjustPan"
         android:inputType="textPersonName"
         android:minHeight="48dp"
+        android:windowSoftInputMode="adjustPan"
+        app:layout_constraintBottom_toTopOf="@+id/add"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listEdit"
         tools:ignore="SpeakableTextPresentCheck" />
+
+    <Button
+        android:id="@+id/add"
+        android:layout_width="93dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="72dp"
+        android:onClick="add"
+        android:text="@string/add"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listEdit"
+        app:layout_constraintVertical_bias="0.0"
+        tools:ignore="OnClick" />
 
     <Button
         android:id="@+id/buttonEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="290dp"
-        android:layout_marginTop="550dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="72dp"
         android:onClick="edit"
         android:text="@string/edit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.384"
+        app:layout_constraintStart_toEndOf="@+id/add"
+        app:layout_constraintTop_toBottomOf="@+id/listEdit"
         tools:ignore="UsingOnClickInXml" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="72dp"
+        android:onClick="delete"
+        android:text="@string/delete"
+        app:layout_constraintEnd_toStartOf="@+id/add"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listEdit" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="394dp"
         android:layout_height="50dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="470dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="89dp"
+        android:layout_marginBottom="3dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add">
 
+        <RadioButton
+            android:id="@+id/radioPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/price" />
 
         <RadioButton
             android:id="@+id/radioProduct"
@@ -55,21 +112,24 @@
             android:text="@string/product" />
 
         <RadioButton
-            android:id="@+id/radioPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:text="@string/price" />
-
-        <RadioButton
             android:id="@+id/radioAmount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:clickable="true"
+            android:focusable="true"
             android:text="@string/amount" />
+
+        <RadioButton
+            android:id="@+id/radioMarket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="@string/name_market" />
     </RadioGroup>
 
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

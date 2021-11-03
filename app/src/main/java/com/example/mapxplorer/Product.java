@@ -1,6 +1,6 @@
 package com.example.mapxplorer;
 
-public class Product {
+public class Product implements Comparable<Product> {
     private String nameProduct;
     private double price;
     private int amount;
@@ -17,4 +17,14 @@ public class Product {
     public void setPrice(double price) { this.price = price; }
     public int getAmount() { return amount; }
     public void setAmount(int amount) { this.amount = amount; }
-}
+
+    public int compareTo(Product product) { // Comparable
+        return Double.compare(this.price, product.price);
+    }
+    public int compareAmount(Product p){
+        return Integer.parseInt(String.valueOf(Double.compare(amount, p.getAmount())));
+    }
+    public int compareName(Product p){
+        return nameProduct.compareTo(p.nameProduct);
+    }
+    }
