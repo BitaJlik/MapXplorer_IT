@@ -95,7 +95,7 @@ public class Edit extends AppCompatActivity {
                 market.setNameMarket(input.getText().toString());
             }
             finish();
-        Intent intent = new Intent(this,MarketShowProducts.class);
+        Intent intent = new Intent(this,ShowProductsInMarket.class);
         startActivity(intent);
     }
     public void add(View view){
@@ -112,14 +112,14 @@ public class Edit extends AppCompatActivity {
             market.getProducts().add(new Product("",0,Integer.parseInt(input.getText().toString())));
         }
         finish();
-        Intent intent = new Intent(this,MarketShowProducts.class);
+        Intent intent = new Intent(this,ShowProductsInMarket.class);
         startActivity(intent);
     }
     public void delete(View view){
         if(market.getProducts().isEmpty()){
             return;
         }
-        Intent intent = new Intent(this,MarketShowProducts.class);
+        Intent intent = new Intent(this,ShowProductsInMarket.class);
         if(radioMarket.isChecked()){
             DataBase.markets.remove(DataBase.id);
             intent = new Intent(this,MapsActivity.class);

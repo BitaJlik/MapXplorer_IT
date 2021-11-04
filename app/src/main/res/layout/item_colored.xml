@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:paddingBottom="10dp"
+    android:background="#CFCFCF"
+    android:layout_height="60dp">
+
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="215dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+
+        />
+
+    <TextView
+        android:id="@+id/productPrice"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="290dp"
+        android:layout_marginTop="5dp"
+
+        />
+
+    <TextView
+        android:id="@+id/productAmount"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="290dp"
+        android:layout_marginTop="30dp"
+
+        />
+
+</FrameLayout>

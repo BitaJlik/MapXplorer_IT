@@ -71,7 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                market.getLongitude() == circle.getCenter().longitude){
                 Toast.makeText(this,market.getNameMarket() + circle.getCenter().latitude,Toast.LENGTH_SHORT).show();
                 DataBase.id = i;
-                Intent intent = new Intent(this, MarketShowProducts.class);
+                Intent intent = new Intent(this, ShowProductsInMarket.class);
                 startActivity(intent);
             }
             i++;

@@ -17,13 +17,13 @@
         android:theme="@style/Theme.MapXplorer"
         android:windowSoftInputMode="adjustPan">
         <activity
+            android:name=".ShowProductsInMarket"
+            android:exported="false" />
+        <activity
             android:name=".Search"
             android:exported="false" />
         <activity
             android:name=".Edit"
-            android:exported="false" />
-        <activity
-            android:name=".MarketShowProducts"
             android:exported="false" />
         <activity
             android:name=".MapsActivity"
