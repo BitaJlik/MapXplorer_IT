@@ -21,6 +21,10 @@
     <string name="sort_by_price">Price</string>
     <string name="sort_by_amount">Amount</string>
     <string name="sort_by_name">Name</string>
+    <string name="email">Email</string>
+    <string name="input_name">Input Name</string>
+    <string name="register">Register</string>
+    <string name="input_name_market">Name market</string>
 
 
 </resources>

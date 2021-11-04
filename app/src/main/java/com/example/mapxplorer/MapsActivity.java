@@ -3,12 +3,18 @@ package com.example.mapxplorer;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
+import com.example.mapxplorer.User.GetCurrentUserFromDB;
+import com.example.mapxplorer.User.User;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,9 +24,23 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.rengwuxian.materialedittext.MaterialEditText;
+
+import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
     private Object g ;
+    public static String idUser;
+    FirebaseAuth firebaseAuth;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
+    ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +52,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference("Markets");
+        constraintLayout = findViewById(R.id.constraintLayout);
+        GetCurrentUserFromDB.getUser();
 
     }
 
@@ -80,32 +106,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void addMarket(View view) {
+        FirebaseAuth firebaseAuthuser;
+        FirebaseDatabase firebaseDatabaseuser;
+        DatabaseReference databaseReferenceuser;
+
         GoogleMap googleMap = (GoogleMap) g;
         double latitude = googleMap.getCameraPosition().target.latitude;
         double longitude = googleMap.getCameraPosition().target.longitude;
 
-        googleMap.addCircle(
-                new CircleOptions().center(
-                        new LatLng(latitude,longitude)).
-                        radius(12.0).
-                        fillColor(Color.BLUE).
-                        strokeColor(Color.RED).
-                        strokeWidth(5).
-                        clickable(true));
-        System.out.println("Added " + latitude +"\t"+ longitude);
-        DataBase.markets.add(new Market("Market",latitude,longitude));
+
+        Market market = new Market("Market",latitude,longitude);
+        DataBase.markets.add(market);
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle("Adding new Market");
+        dialog.setMessage("Input on these inputs");
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View registerWindow = inflater.inflate(R.layout.add_market,null);
+        dialog.setView(registerWindow);
+
+        MaterialEditText email = registerWindow.findViewById(R.id.emailInput);
+        MaterialEditText password = registerWindow.findViewById(R.id.passwordInput);
+        MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
+
+        dialog.setNegativeButton("Cancel", (dialog1, which) -> {
+            dialog1.dismiss();
+        });
+        dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
+            if(TextUtils.isEmpty(email.toString())){
+                Snackbar.make(constraintLayout,"Input email",Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            if(TextUtils.isEmpty(namemarket.toString())){
+                Snackbar.make(constraintLayout,"Input name",Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            if(Objects.requireNonNull(password.getText()).toString().length() < 5){
+                Snackbar.make(constraintLayout,"Input password more than 5 symbols",Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            // adding market with email user
+
+            firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
+                    .addOnSuccessListener(authResult -> {
+                        googleMap.addCircle(
+                                new CircleOptions().center(
+                                        new LatLng(latitude,longitude)).
+                                        radius(12.0).
+                                        fillColor(Color.BLUE).
+                                        strokeColor(Color.RED).
+                                        strokeWidth(5).
+                                        clickable(true));
+                        databaseReference.child(Objects.requireNonNull(
+                                FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(market)
+                                .addOnSuccessListener(unused -> Snackbar.make(constraintLayout,"Success",Snackbar.LENGTH_SHORT).show());
+                    });
+
+
+        });
+
+        dialog.show();
     }
+
+
     public void search(View view) {
         Intent intent = new Intent(this,Search.class);
         startActivity(intent);
-//        String finding = "";
-//        for(Market market : DataBase.markets ){
-//            if(finding.equals(market.getNameMarket())){
-//                ((GoogleMap) g).moveCamera(CameraUpdateFactory.newLatLngZoom(
-//                        new LatLng(market.getLatitude(),market.getLongitude()),16.0f));
-//            }
-//            System.out.println("\n"+market.toString());
-//        }
     }
 
 
