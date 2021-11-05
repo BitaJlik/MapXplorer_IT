@@ -17,6 +17,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class Edit extends AppCompatActivity {
     private Market market ;
@@ -27,13 +29,20 @@ public class Edit extends AppCompatActivity {
     RadioButton radioAmount;
     RadioButton radioMarket;
 
-    private int pos = 0;
+    private int posM = 0;
+    private int posItem = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        for(int i =0;i < DataBase.online_markets.size();i++){
+            if(DataBase.online_markets.get(i).getID().equals(DataBase.id)){
+                posM = i;
+            }
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        market = DataBase.markets.get(DataBase.id);
+        market = DataBase.online_markets.get(posM);
         ListView listView = findViewById(R.id.listEdit);
         radioGroup = findViewById(R.id.radioGroup);
 
@@ -57,8 +66,8 @@ public class Edit extends AppCompatActivity {
                 new int[]{android.R.id.text1, android.R.id.text2});
         listView.setOnItemClickListener((parent, view, position, id) -> {
             System.out.println("+++" + arrayList.get(position));
-            pos = position;
-            input.setText(market.getProducts().get(pos).getNameProduct());
+            posItem = position;
+            input.setText(market.getProducts().get(posItem).getNameProduct());
             radioGroup.clearCheck();
             radioProduct.setChecked(true);
         });
@@ -70,13 +79,13 @@ public class Edit extends AppCompatActivity {
             else input.setText("");
             if (!market.getProducts().isEmpty()) {
                 if(radioProduct.isChecked()){
-                    input.setText(market.getProducts().get(pos).getNameProduct());
+                    input.setText(market.getProducts().get(posItem).getNameProduct());
                 }
                 else if(radioPrice.isChecked()) {
-                    input.setText(String.valueOf(market.getProducts().get(pos).getPrice()));
+                    input.setText(String.valueOf(market.getProducts().get(posItem).getPrice()));
                 }
                 else if(radioAmount.isChecked()) {
-                    input.setText(String.valueOf(market.getProducts().get(pos).getAmount()));
+                    input.setText(String.valueOf(market.getProducts().get(posItem).getAmount()));
                 }
             }
 
@@ -88,13 +97,13 @@ public class Edit extends AppCompatActivity {
                 return;
             }
             if(radioProduct.isChecked()){
-                market.getProducts().get(pos).setNameProduct(input.getText().toString());
+                market.getProducts().get(posItem).setNameProduct(input.getText().toString());
             }
             else if(radioPrice.isChecked()) {
-                market.getProducts().get(pos).setPrice(Double.parseDouble(input.getText().toString()));
+                market.getProducts().get(posItem).setPrice(Double.parseDouble(input.getText().toString()));
             }
             else if(radioAmount.isChecked()) {
-                market.getProducts().get(pos).setAmount(Integer.parseInt(input.getText().toString()));
+                market.getProducts().get(posItem).setAmount(Integer.parseInt(input.getText().toString()));
             }
             else if(radioMarket.isChecked()){
                 market.setNameMarket(input.getText().toString());
@@ -108,6 +117,19 @@ public class Edit extends AppCompatActivity {
             return;
         }
         if(radioProduct.isChecked()){
+
+            DataBase.reference.child(
+                    Objects.requireNonNull(
+                            DataBase.auth.getCurrentUser())
+                            .getUid())
+                    .child("markets")
+                    .child(String.valueOf(posM))
+                    .child("products")
+            .setValue(new Product(input.getText().toString(),0,0));
+
+            Map<String ,Object> data = new HashMap<>();
+            data.put(String.valueOf(market.getProducts().size()),new Product(input.getText().toString(),0,0));
+            DataBase.reference.updateChildren(data);
             market.getProducts().add(new Product(input.getText().toString(),0,0));
         }
         else if(radioPrice.isChecked()) {
@@ -126,11 +148,11 @@ public class Edit extends AppCompatActivity {
         }
         Intent intent = new Intent(this,ShowProductsInMarket.class);
         if(radioMarket.isChecked()){
-            DataBase.markets.remove(DataBase.id);
+            DataBase.online_markets.remove(posM);
             intent = new Intent(this,MapsActivity.class);
         }
         else {
-            market.getProducts().remove(pos);
+            market.getProducts().remove(posItem);
         }
         finish();
         startActivity(intent);

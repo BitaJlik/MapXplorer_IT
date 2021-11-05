@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.mapxplorer.User.GetCurrentUserFromDB;
 import com.example.mapxplorer.User.User;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -26,20 +25,21 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
     private Object g ;
-    public static String idUser;
-    FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
+
     ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +53,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Markets");
         constraintLayout = findViewById(R.id.constraintLayout);
-        GetCurrentUserFromDB.getUser();
 
     }
 
@@ -72,8 +68,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // add listener for opening shops
         googleMap.setOnCircleClickListener(this);
         // add circles from DB on map like markets
-        if(!DataBase.markets.isEmpty()){
-            for(Market market : DataBase.markets){
+        System.out.println(DataBase.online_markets);
+
+        if(!DataBase.online_markets.isEmpty()){
+            for(Market market : DataBase.online_markets){
                 googleMap.addCircle(
                         new CircleOptions().center(
                         new LatLng(
@@ -91,32 +89,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onCircleClick(@NonNull Circle circle) {
-        int i=0; // reference on other activity
-        for(Market market : DataBase.markets){
+        for(Market market : DataBase.online_markets){
             if(market.getLatitude() == circle.getCenter().latitude &&
                market.getLongitude() == circle.getCenter().longitude){
-                Toast.makeText(this,market.getNameMarket() + circle.getCenter().latitude,Toast.LENGTH_SHORT).show();
-                DataBase.id = i;
+                Toast.makeText(this,market.getNameMarket(),Toast.LENGTH_SHORT).show();
+
                 Intent intent = new Intent(this, ShowProductsInMarket.class);
                 startActivity(intent);
             }
-            i++;
         }
-
     }
 
     public void addMarket(View view) {
-        FirebaseAuth firebaseAuthuser;
-        FirebaseDatabase firebaseDatabaseuser;
-        DatabaseReference databaseReferenceuser;
-
         GoogleMap googleMap = (GoogleMap) g;
         double latitude = googleMap.getCameraPosition().target.latitude;
         double longitude = googleMap.getCameraPosition().target.longitude;
 
 
-        Market market = new Market("Market",latitude,longitude);
-        DataBase.markets.add(market);
+        Market market = new Market(DataBase.user.getName(),latitude,longitude);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Adding new Market");
@@ -125,46 +115,42 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         View registerWindow = inflater.inflate(R.layout.add_market,null);
         dialog.setView(registerWindow);
 
-        MaterialEditText email = registerWindow.findViewById(R.id.emailInput);
-        MaterialEditText password = registerWindow.findViewById(R.id.passwordInput);
+
+//        String email = Objects.requireNonNull(DataBase.auth.getCurrentUser()).getEmail();
+//        String password = DataBase.reference.child(Objects.requireNonNull(DataBase.auth.getUid())).child("password").getKey();
         MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
 
         dialog.setNegativeButton("Cancel", (dialog1, which) -> {
             dialog1.dismiss();
         });
         dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
-            if(TextUtils.isEmpty(email.toString())){
-                Snackbar.make(constraintLayout,"Input email",Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if(TextUtils.isEmpty(namemarket.toString())){
-                Snackbar.make(constraintLayout,"Input name",Snackbar.LENGTH_SHORT).show();
-                return;
-            }
-            if(Objects.requireNonNull(password.getText()).toString().length() < 5){
-                Snackbar.make(constraintLayout,"Input password more than 5 symbols",Snackbar.LENGTH_SHORT).show();
-                return;
-            }
 
-            // adding market with email user
+                    if (TextUtils.isEmpty(namemarket.toString())) {
+                        Snackbar.make(constraintLayout, "Input name", Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
-            firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-                    .addOnSuccessListener(authResult -> {
-                        googleMap.addCircle(
-                                new CircleOptions().center(
-                                        new LatLng(latitude,longitude)).
-                                        radius(12.0).
-                                        fillColor(Color.BLUE).
-                                        strokeColor(Color.RED).
-                                        strokeWidth(5).
-                                        clickable(true));
-                        databaseReference.child(Objects.requireNonNull(
-                                FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(market)
-                                .addOnSuccessListener(unused -> Snackbar.make(constraintLayout,"Success",Snackbar.LENGTH_SHORT).show());
+                    // adding market with email user
+                    Map<String,Object> data = new HashMap<>();
+                    data.put(String.valueOf(DataBase.users.get(DataBase.users.size()-1).getMarkets().size()),market);
+                    DataBase.reference.child(Objects.requireNonNull(DataBase.auth.getUid())).child("markets")
+                            .updateChildren(data).addOnSuccessListener(unused -> {
+                        DataBase.online_markets.add(market);
+                        {
+                            googleMap.addCircle(
+                                    new CircleOptions().center(
+                                            new LatLng(
+                                                    market.getLatitude(),
+                                                    market.getLongitude())).
+                                            radius(10.0).
+                                            fillColor(Color.BLUE).
+                                            strokeColor(Color.RED).
+                                            strokeWidth(5).
+                                            clickable(true));
+                        } // adding circle on map
                     });
 
-
-        });
+                });
 
         dialog.show();
     }

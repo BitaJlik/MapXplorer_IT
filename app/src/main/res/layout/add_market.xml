@@ -12,21 +12,7 @@
         android:layout_margin="20dp"
         android:orientation="vertical">
 
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/emailInput"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:text=""
-            android:textColor="#333"
-            android:textColorHint="@color/black"
-            android:textSize="20sp"
-            app:met_floatingLabel="highlight"
-            app:met_baseColor="#0056d3"
-            app:met_primaryColor="#54FF26"
-            app:met_singleLineEllipsis="true"
-            />
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,21 +28,7 @@
             app:met_primaryColor="#54FF26"
             app:met_singleLineEllipsis="true"
             />
-        <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/passwordInput"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:text=""
-            android:textColor="#333"
-            android:textColorHint="@color/black"
-            android:textSize="20sp"
-            app:met_floatingLabel="highlight"
-            app:met_baseColor="#0056d3"
-            app:met_primaryColor="#54FF26"
-            app:met_singleLineEllipsis="true"
-            />
+
 
 
     </LinearLayout>

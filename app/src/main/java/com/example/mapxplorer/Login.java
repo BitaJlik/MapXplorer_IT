@@ -1,41 +1,41 @@
 package com.example.mapxplorer;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import static android.content.ContentValues.TAG;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.example.mapxplorer.User.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 public class Login extends AppCompatActivity {
     Button regiter;
     Button login;
-    FirebaseAuth firebaseAuth;
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
     ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +44,20 @@ public class Login extends AppCompatActivity {
         constraintLayout = findViewById(R.id.loginLayout);
         regiter = findViewById(R.id.register);
         login = findViewById(R.id.login);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference("Users");
+
+        DataBase.auth = FirebaseAuth.getInstance();
+        DataBase.database = FirebaseDatabase.getInstance();
+        DataBase.reference = DataBase.database.getReference("Users");
 
         login.setOnClickListener(v -> login());
         regiter.setOnClickListener(v -> showRegisterCard());
+
+        MaterialEditText email = new MaterialEditText(this) ;
+        email.setText("qq@g.com");
+        MaterialEditText password = new MaterialEditText(this);
+        password.setText("qweqwe");
+
+
     }
     private void login(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
@@ -75,24 +83,43 @@ public class Login extends AppCompatActivity {
                 Snackbar.make(constraintLayout,"Input password more than 5 symbols",Snackbar.LENGTH_SHORT).show();
                 return;
             }
-
+            DataBase.online_markets = new ArrayList<>();
             // LogIn User from DB
+            DataBase.auth.signInWithEmailAndPassword(
+                    Objects.requireNonNull(email.getText()).toString(),password.getText().toString())
+                    .addOnSuccessListener(authResult -> {
+                        ValueEventListener listener = new ValueEventListener() {
+                            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for( DataSnapshot snapuser : snapshot.getChildren()){
+                                    DataBase.users.add(snapuser.getValue(User.class));
+                                    ArrayList<Market> markets = new ArrayList<>();
+                                    System.out.println(markets);
+                                    for(DataSnapshot dataSnapshot : snapuser.child("markets").getChildren()){
+                                        markets.add(dataSnapshot.getValue(Market.class));
+                                    }
+                                    System.out.println("after" + markets);
+                                    DataBase.users.get(DataBase.users.size()-1).setMarkets(markets);
+                                    DataBase.online_markets.addAll(markets);
+                                }
+                                System.out.println( DataBase.users.toString());
+                            }
 
-            firebaseAuth.signInWithEmailAndPassword(email.getText().toString(),password.getText().toString())
-            .addOnSuccessListener(authResult -> {
-                Intent intent = new Intent(Login.this, MapsActivity.class);
-                startActivity(intent);
-                finish();
-            }).addOnFailureListener(e -> {
-                Snackbar.make(constraintLayout,"Incorrect pass or email" + e.getMessage(),Snackbar.LENGTH_LONG).show();
+                            @Override public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        };
+                        DataBase.reference.addValueEventListener(listener);
+                        Intent intent = new Intent(Login.this, MapsActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }).addOnFailureListener(e -> {
+                Snackbar.make(constraintLayout,"Incorrect pass or email",Snackbar.LENGTH_LONG).show();
             });
-
-
         });
-
         dialog.show();
     }
     private void showRegisterCard() {
+        System.out.println("register");
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Registration");
         dialog.setMessage("Input on these inputs");
@@ -125,21 +152,23 @@ public class Login extends AppCompatActivity {
 
             // Registration user in DataBase
 
-            firebaseAuth.createUserWithEmailAndPassword(Objects.requireNonNull(email.getText()).toString(),password.getText().toString())
+            DataBase.auth.createUserWithEmailAndPassword(Objects.requireNonNull(email.getText()).toString(),password.getText().toString())
                     .addOnSuccessListener(authResult -> {
                         User user = new User();
                         user.setName(Objects.requireNonNull(name.getText()).toString());
                         user.setEmail(email.getText().toString());
                         user.setPassword(password.getText().toString());
-                        databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(user).addOnSuccessListener(unused -> {
+                        ArrayList<Market> markets = new ArrayList<>();
+                        user.setMarkets(markets);
+                        DataBase.reference.child(Objects.requireNonNull(
+                                FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(user)
+                                .addOnSuccessListener(unused -> {
                             Snackbar.make(constraintLayout,"Success",Snackbar.LENGTH_SHORT).show();
-                            FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                            //FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
                         });
                     });
         });
-
         dialog.show();
     }
-
 
 }

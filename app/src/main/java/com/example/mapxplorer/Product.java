@@ -5,6 +5,8 @@ public class Product implements Comparable<Product> {
     private double price;
     private int amount;
 
+    public Product(){}
+
     public Product(String nameProduct,double price,int amount){
         this.nameProduct = nameProduct;
         this.price = price;
@@ -27,4 +29,13 @@ public class Product implements Comparable<Product> {
     public int compareName(Product p){
         return nameProduct.compareTo(p.nameProduct);
     }
+
+    @Override
+    public String toString() {
+        return "\n\nProduct{" +
+                "nameProduct='" + nameProduct + '\'' +
+                ", price=" + price +
+                ", amount=" + amount +
+                '}';
     }
+}
