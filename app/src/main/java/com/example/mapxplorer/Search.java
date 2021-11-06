@@ -30,7 +30,6 @@ public class Search extends AppCompatActivity {
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println(search.getText().toString());
                 adapter.getFilter().filter(s.toString());
             }
             @Override public void afterTextChanged(Editable s) { }
@@ -39,6 +38,7 @@ public class Search extends AppCompatActivity {
         });
         Intent intent = new Intent(this, ShowProductsInMarket.class);
         listView.setOnItemClickListener((parent, view, position, id) -> {
+            DataBase.ActiveShowingMarket = DataBase.getAllMarkets().get(position);
             startActivity(intent);
         });
         listView.setAdapter(adapter);
@@ -46,5 +46,8 @@ public class Search extends AppCompatActivity {
     }
     public void init(){
         arrayList.clear();
+        for(int i =0;i< DataBase.getAllMarkets().size();i++){
+            arrayList.add(DataBase.getAllMarkets().get(i).getNameMarket());
+        }
     }
 }
