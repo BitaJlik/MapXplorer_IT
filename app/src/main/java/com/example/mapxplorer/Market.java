@@ -13,7 +13,9 @@ public class Market {
     private double latitude;
     private double longitude;
 
-    public Market(){}
+    public Market(){
+        products = new ArrayList<>();
+    }
 
     public Market(String nameMarket, double latitude, double longitude) {
         this.nameMarket = nameMarket;

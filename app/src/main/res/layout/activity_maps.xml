@@ -22,12 +22,11 @@
         map:mapId="@string/map_id" />
 
     <Button
-        android:id="@+id/search"
+        android:id="@+id/list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
-        android:onClick="search"
         android:text="@string/search"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintStart_toStartOf="parent" />
@@ -36,13 +35,11 @@
         android:id="@+id/addMarket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:onClick="addMarket"
         android:text="@string/add"
         map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        />
+        map:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

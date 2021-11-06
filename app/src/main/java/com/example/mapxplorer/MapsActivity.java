@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,23 +24,19 @@ import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
     private Object g ;
-
     ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +49,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        Button addMarket = findViewById(R.id.addMarket);
+        Button listMarkets = findViewById(R.id.list);
+        addMarket.setOnClickListener(v -> addMarket());
+        listMarkets.setOnClickListener(v -> list());
         constraintLayout = findViewById(R.id.constraintLayout);
+
+
 
     }
 
@@ -68,9 +70,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // add listener for opening shops
         googleMap.setOnCircleClickListener(this);
         // add circles from DB on map like markets
-        System.out.println(DataBase.online_markets);
+        System.out.println("Online" + DataBase.online_markets);
 
-        if(!DataBase.online_markets.isEmpty()){
+        if(!DataBase.online_markets.isEmpty() ){
             for(Market market : DataBase.online_markets){
                 googleMap.addCircle(
                         new CircleOptions().center(
@@ -85,28 +87,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
         g = googleMap;
+
+        DataBase.print();
     }
 
     @Override
     public void onCircleClick(@NonNull Circle circle) {
+
         for(Market market : DataBase.online_markets){
             if(market.getLatitude() == circle.getCenter().latitude &&
                market.getLongitude() == circle.getCenter().longitude){
                 Toast.makeText(this,market.getNameMarket(),Toast.LENGTH_SHORT).show();
-
+                DataBase.id = market.getID();
                 Intent intent = new Intent(this, ShowProductsInMarket.class);
                 startActivity(intent);
+               break;
             }
         }
     }
 
-    public void addMarket(View view) {
+    public void addMarket() {
         GoogleMap googleMap = (GoogleMap) g;
         double latitude = googleMap.getCameraPosition().target.latitude;
         double longitude = googleMap.getCameraPosition().target.longitude;
 
 
-        Market market = new Market(DataBase.user.getName(),latitude,longitude);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("Adding new Market");
@@ -118,24 +123,26 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 //        String email = Objects.requireNonNull(DataBase.auth.getCurrentUser()).getEmail();
 //        String password = DataBase.reference.child(Objects.requireNonNull(DataBase.auth.getUid())).child("password").getKey();
-        MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
+
 
         dialog.setNegativeButton("Cancel", (dialog1, which) -> {
             dialog1.dismiss();
         });
         dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
-
+            MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
+            Market market = new Market(Objects.requireNonNull(namemarket.getText()).toString(),latitude,longitude);
                     if (TextUtils.isEmpty(namemarket.toString())) {
                         Snackbar.make(constraintLayout, "Input name", Snackbar.LENGTH_SHORT).show();
                         return;
                     }
-
+                    System.out.println("+++" + market);
                     // adding market with email user
                     Map<String,Object> data = new HashMap<>();
                     data.put(String.valueOf(DataBase.users.get(DataBase.users.size()-1).getMarkets().size()),market);
                     DataBase.reference.child(Objects.requireNonNull(DataBase.auth.getUid())).child("markets")
                             .updateChildren(data).addOnSuccessListener(unused -> {
                         DataBase.online_markets.add(market);
+                        DataBase.users.get(DataBase.users.size()-1).getMarkets().add(market);
                         {
                             googleMap.addCircle(
                                     new CircleOptions().center(
@@ -156,7 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void search(View view) {
+    public void list() {
         Intent intent = new Intent(this,Search.class);
         startActivity(intent);
     }

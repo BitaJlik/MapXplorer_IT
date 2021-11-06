@@ -16,7 +16,13 @@ public class DataBase {
     public static DatabaseReference reference;
     public static ArrayList<Market> online_markets = new ArrayList<>();
 
-
+    public static void print(){
+        System.out.println("" +
+                "\n " + online_markets +
+                "" +
+                "" +
+                "");
+    }
     public static String id;
 //    static {
 //        markets.add(new Market("Атб",49.23152796510891, 28.406867686183425)); // 0
