@@ -1,10 +1,8 @@
 package com.example.mapxplorer.User;
 
-import com.example.mapxplorer.DataBase;
 import com.example.mapxplorer.Market;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class User {
     private String name,pass,email;
@@ -39,9 +37,9 @@ public class User {
     @Override
     public String toString() {
         return "\nUser{" +
-                "\nname='" + name + '\n' +
-                ", pass='" + pass + '\n' +
-                ", email='" + email + '\n' +
+                "\nname='" + name +
+                ", pass='" + pass +
+                ", email='" + email +
                 ", market=" + markets + '\n' +
                 '}';
     }

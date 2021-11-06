@@ -12,13 +12,10 @@ import android.widget.SimpleAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class Edit extends AppCompatActivity {
     private Market market ;
@@ -29,29 +26,22 @@ public class Edit extends AppCompatActivity {
     RadioButton radioAmount;
     RadioButton radioMarket;
 
-    private int posM = 0;
     private int posItem = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        for(int i =0;i < DataBase.online_markets.size();i++){
-            if(DataBase.online_markets.get(i).getID().equals(DataBase.id)){
-                posM = i;
-            }
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        market = DataBase.online_markets.get(posM);
+
         ListView listView = findViewById(R.id.listEdit);
         radioGroup = findViewById(R.id.radioGroup);
-
         radioProduct = findViewById(R.id.radioProduct);
         radioPrice = findViewById(R.id.radioPrice);
         radioAmount = findViewById(R.id.radioAmount);
         radioMarket = findViewById(R.id.radioMarket);
-
         input = findViewById(R.id.editInput);
+        market = DataBase.ActiveShowingMarket;
 
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
         for(Product product : market.getProducts()){
@@ -90,7 +80,6 @@ public class Edit extends AppCompatActivity {
             }
 
         });
-
     }
     public void edit(View view){
             if(market.getProducts().isEmpty()){
@@ -108,6 +97,16 @@ public class Edit extends AppCompatActivity {
             else if(radioMarket.isChecked()){
                 market.setNameMarket(input.getText().toString());
             }
+
+        String Uid = FirebaseAuth.getInstance().getUid();
+        if(Uid == null){
+            return;
+        }
+        Map<String,Object> data = new HashMap<>();
+        ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
+        data.put("markets",markets);
+        DataBase.reference.child(Uid).child("markets").removeValue();
+        DataBase.reference.child(Uid).updateChildren(data);
             finish();
         Intent intent = new Intent(this,ShowProductsInMarket.class);
         startActivity(intent);
@@ -116,27 +115,18 @@ public class Edit extends AppCompatActivity {
         if(input.getText().toString().equals("")){
             return;
         }
-        if(radioProduct.isChecked()){
-
-            DataBase.reference.child(
-                    Objects.requireNonNull(
-                            DataBase.auth.getCurrentUser())
-                            .getUid())
-                    .child("markets")
-                    .child(String.valueOf(posM))
-                    .child("products")
-            .setValue(new Product(input.getText().toString(),0,0));
-
-            Map<String ,Object> data = new HashMap<>();
-            data.put(String.valueOf(market.getProducts().size()),new Product(input.getText().toString(),0,0));
-            DataBase.reference.updateChildren(data);
+        {
+            String Uid = FirebaseAuth.getInstance().getUid();
+            if(Uid == null){
+                return;
+            }
+            Map<String,Object> data = new HashMap<>();
+            Market market = DataBase.ActiveShowingMarket;
             market.getProducts().add(new Product(input.getText().toString(),0,0));
-        }
-        else if(radioPrice.isChecked()) {
-            market.getProducts().add(new Product("",Double.parseDouble(input.getText().toString()),0));
-        }
-        else if(radioAmount.isChecked()) {
-            market.getProducts().add(new Product("",0,Integer.parseInt(input.getText().toString())));
+            ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
+            data.put("markets",markets);
+            DataBase.reference.child(Uid).child("markets").removeValue();
+            DataBase.reference.child(Uid).updateChildren(data);
         }
         finish();
         Intent intent = new Intent(this,ShowProductsInMarket.class);
@@ -148,12 +138,20 @@ public class Edit extends AppCompatActivity {
         }
         Intent intent = new Intent(this,ShowProductsInMarket.class);
         if(radioMarket.isChecked()){
-            DataBase.online_markets.remove(posM);
             intent = new Intent(this,MapsActivity.class);
         }
         else {
             market.getProducts().remove(posItem);
         }
+        String Uid = FirebaseAuth.getInstance().getUid();
+        if(Uid == null){
+            return;
+        }
+        Map<String,Object> data = new HashMap<>();
+        ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
+        data.put("markets",markets);
+        DataBase.reference.child(Uid).child("markets").removeValue();
+        DataBase.reference.child(Uid).updateChildren(data);
         finish();
         startActivity(intent);
     }

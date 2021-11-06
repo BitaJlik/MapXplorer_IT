@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Market {
 
     private String nameMarket;
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Product> products ;
     private double latitude;
     private double longitude;
 
@@ -21,6 +21,7 @@ public class Market {
         this.nameMarket = nameMarket;
         this.latitude = latitude;
         this.longitude = longitude;
+        products = new ArrayList<>();
     }
 
     public String getNameMarket() { return nameMarket; }
@@ -35,7 +36,7 @@ public class Market {
         @Override
     public String toString() {
         return "Market{" +
-                "nameMarket='" + nameMarket  +
+                "\nnameMarket='" + nameMarket  +
                 ", products=" + products +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

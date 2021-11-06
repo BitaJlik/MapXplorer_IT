@@ -39,7 +39,6 @@ public class Search extends AppCompatActivity {
         });
         Intent intent = new Intent(this, ShowProductsInMarket.class);
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            DataBase.id = DataBase.online_markets.get(position).getID();
             startActivity(intent);
         });
         listView.setAdapter(adapter);
@@ -47,8 +46,5 @@ public class Search extends AppCompatActivity {
     }
     public void init(){
         arrayList.clear();
-        for(Market market : DataBase.online_markets){
-            arrayList.add(market.getNameMarket());
-        }
     }
 }

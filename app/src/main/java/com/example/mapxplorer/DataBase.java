@@ -1,29 +1,40 @@
 package com.example.mapxplorer;
 
+import androidx.annotation.NonNull;
+
 import com.example.mapxplorer.User.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DataBase {
-    static User user = new User();
-    static List<User> users = new ArrayList<>();
-    public static FirebaseAuth auth;
-    public static FirebaseDatabase database;
-    public static DatabaseReference reference;
-    public static ArrayList<Market> online_markets = new ArrayList<>();
+    static FirebaseAuth auth = FirebaseAuth.getInstance();
+    static FirebaseDatabase database = FirebaseDatabase.getInstance();
+    static DatabaseReference  reference = DataBase.database.getReference("Users");
 
-    public static void print(){
-        System.out.println("" +
-                "\n " + online_markets +
-                "" +
-                "" +
-                "");
+    static User ActiveSessionUser = new User("NULL","NULL","NULL");
+    static Market ActiveShowingMarket = new Market("NULL",0,0);
+    static ArrayList<User> users = new ArrayList<>();
+
+    static String idMarket;
+
+    public static ArrayList<Market> getAllMarkets(){
+        ArrayList<Market> markets = new ArrayList<>();
+        for(int i = 0; i < users.size();i++){
+            if(users.get(i).getMarkets().size() > 0){
+                markets.addAll(users.get(i).getMarkets());
+            }
+        }
+        return markets;
     }
-    public static String id;
+
+
+
 //    static {
 //        markets.add(new Market("Атб",49.23152796510891, 28.406867686183425)); // 0
 //        markets.add(new Market("Магазинчик",49.2358082095236, 28.408807136430234));

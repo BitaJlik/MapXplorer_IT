@@ -19,8 +19,6 @@ public class ShowProductsInMarket extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<Product> arrayList;
     private Button sort;
-    private Button edit;
-    private int pos = 0;
     ProductAdapter.OnClickListener listener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +26,9 @@ public class ShowProductsInMarket extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_markets);
         TextView marketName = findViewById(R.id.nameMarket);
-        edit = findViewById(R.id.edit);
 
-        if(DataBase.user.getName() == null && DataBase.user.getPassword() == null){
+        Button edit = findViewById(R.id.edit); // checking for we have registered user
+        if(DataBase.ActiveSessionUser.getEmail().equals("NULL")){
             edit.setAlpha(0);
             edit.setClickable(false);
         }
@@ -52,39 +50,42 @@ public class ShowProductsInMarket extends AppCompatActivity {
 
         recyclerView.addOnItemTouchListener(simple);
         recyclerView.setLayoutManager(layoutManager);
-        for(int i =0;i < DataBase.online_markets.size();i++){
-            if(DataBase.online_markets.get(i).getID().equals(DataBase.id)){
-                pos = i;
-            }
-        }
-        marketName.setText(DataBase.online_markets.get(pos).getNameMarket());
+
+        marketName.setText(DataBase.ActiveShowingMarket.getNameMarket());
         init();
         refresh();
+
+        if(!DataBase.ActiveSessionUser.getName().equals("NULL")){
+            for(Market market : DataBase.ActiveSessionUser.getMarkets()){
+                if(DataBase.ActiveShowingMarket.getID().equals(market.getID())){
+                    edit.setAlpha(1);
+                    edit.setClickable(true);
+                    break;
+                }
+                else {
+                    edit.setAlpha(0);
+                    edit.setClickable(false);
+                }
+            }
+        }
+        else {
+            edit.setAlpha(0);
+            edit.setClickable(false);
+        }
     }
 
     public void edit(View view) {
-        int i =0;
-        for(Market market : DataBase.user.getMarkets()){
-            if(market.getID().equals(DataBase.user.getMarkets().get(i).getID())){
-                Intent intent = new Intent(this,Edit.class);
-                startActivity(intent);
-                finish();
-                i = 0;
-            }
-            else edit.setAlpha(0);
-            i++;
-        }
-
+        finish();
+        Intent intent = new Intent(this,Edit.class);
+        startActivity(intent);
     }
     private void init(){
         arrayList.clear();
-        arrayList.addAll(DataBase.online_markets.get(pos).getProducts());
+        arrayList.addAll(DataBase.ActiveShowingMarket.getProducts());
     }
     private void refresh(){
         init();
         ProductAdapter adapter = new ProductAdapter(arrayList, listener);
-
-
         recyclerView.setAdapter(adapter);
     }
     int typeSort = 0;
@@ -95,16 +96,16 @@ public class ShowProductsInMarket extends AppCompatActivity {
         switch (typeSort){
             case 1:
 
-                DataBase.online_markets.get(pos).getProducts().sort(Product::compareTo);
+                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareTo);
                 sort.setText(R.string.sort_by_price);
                 break;
             case 2:
-                DataBase.online_markets.get(pos).getProducts().sort(Product::compareAmount);
+                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareAmount);
                 sort.setText(R.string.sort_by_amount);
                 break;
             case 3:
                 typeSort = 0;
-                DataBase.online_markets.get(pos).getProducts().sort(Product::compareName);
+                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareName);
                 sort.setText(R.string.sort_by_name);
                 break;
         }
