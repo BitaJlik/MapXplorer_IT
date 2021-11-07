@@ -1,13 +1,18 @@
 package com.example.mapxplorer;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -104,9 +109,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 dialog.setView(info);
                 Button button = info.findViewById(R.id.toProducts);
                 TextView nameMarket = info.findViewById(R.id.nameMarket);
-                TextView infoMarket = info.findViewById(R.id.contactInfo);
+                TextView infoMarketOwner = info.findViewById(R.id.contactInfoOwner);
+                TextView infoMarketEmail = info.findViewById(R.id.contactInfoEmail);
+                TextView openTime = info.findViewById(R.id.timeMarket);
                 nameMarket.setText(DataBase.ActiveShowingMarket.getNameMarket());
-                infoMarket.setText(DataBase.ActiveShowingMarket.getOwner());
+                openTime.setText(DataBase.ActiveShowingMarket.getOpenTime());
+                infoMarketOwner.setText(DataBase.ActiveShowingMarket.getOwner());
+                infoMarketEmail.setText(DataBase.ActiveShowingMarket.getEmail());
                 button.setOnClickListener(v -> {
                     Intent intent = new Intent(this, ShowProductsInMarket.class);
                     startActivity(intent);
@@ -118,55 +127,149 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void addMarket() {
+        if(DataBase.ActiveSessionUser.getMarkets().size() == DataBase.ActiveSessionUser.getSizeMaxMarkets()){
+            Snackbar.make(constraintLayout,"Reached maximum limit markets \n Pay for more :) ",Snackbar.LENGTH_LONG).show();
+            return;
+        }
         double latitude = googleMap.getCameraPosition().target.latitude;
         double longitude = googleMap.getCameraPosition().target.longitude;
 
 
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog alertDialog = dialog.create();
         dialog.setTitle("Adding new Market");
         dialog.setMessage("Input on these inputs");
         LayoutInflater inflater = LayoutInflater.from(this);
         View registerWindow = inflater.inflate(R.layout.add_market,null);
+
+        EditText openHours = registerWindow.findViewById(R.id.openHours);
+        EditText openMinutes = registerWindow.findViewById(R.id.openMinutes);
+        EditText closingHours = registerWindow.findViewById(R.id.closingHours);
+        EditText closingMinutes = registerWindow.findViewById(R.id.closingMinutes);
+        MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
+        Button addMarketR = registerWindow.findViewById(R.id.addMarketR);
+
+        openHours.setText("00");
+        openMinutes.setText("00");
+        closingHours.setText("23");
+        closingMinutes.setText("59");
+
+        openHours.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(openHours.getText().toString()) > 23){
+                        openHours.setText(String.valueOf(23));
+                    }
+                }
+                catch (NumberFormatException e){
+                    openHours.setText(String.valueOf(0));
+                }
+
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        closingHours.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(closingHours.getText().toString()) > 23){
+                        closingHours.setText(String.valueOf(23));
+                    }
+                }
+                catch (NumberFormatException e){
+                    closingHours.setText(String.valueOf(0));
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override public void afterTextChanged(Editable s) {
+
+            }
+        });
+        openMinutes.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(openMinutes.getText().toString()) > 59){
+                        openMinutes.setText(String.valueOf(59));
+                    }
+                }
+                catch (NumberFormatException e){
+                    openMinutes.setText(String.valueOf(0));
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        closingMinutes.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(closingMinutes.getText().toString()) > 59){
+                        closingMinutes.setText(String.valueOf(59));
+                    }
+                }
+                catch (NumberFormatException e){
+                    closingMinutes.setText(String.valueOf(0));
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        addMarketR.setOnClickListener(v -> {
+
+            Market market = new Market(Objects.requireNonNull(namemarket.getText()).toString(),latitude,longitude);
+            market.setOwner(DataBase.ActiveSessionUser.getName());
+            market.setEmail(DataBase.ActiveSessionUser.getEmail());
+            market.setOpenTime(openHours.getText().toString() +":"+openMinutes.getText().toString() + " — " +
+                    closingHours.getText().toString() + ":" + closingMinutes.getText().toString());
+            if (namemarket.getText().toString().length() > 2) {
+                // adding market with email user
+                String Uid = FirebaseAuth.getInstance().getUid();
+                if(Uid == null){
+                    return;
+                }
+                Map<String,Object> data = new HashMap<>();
+                DataBase.ActiveSessionUser.getMarkets().add(market);
+                DataBase.reference.child(Uid).removeValue();
+                data.put(Uid,DataBase.ActiveSessionUser);
+                DataBase.reference.updateChildren(data).addOnSuccessListener(unused -> {
+                    DataBase.users.get(DataBase.users.size()-1).getMarkets().add(market);
+                    {
+                        googleMap.addCircle(
+                                new CircleOptions().center(
+                                        new LatLng(
+                                                market.getLatitude(),
+                                                market.getLongitude())).
+                                        radius(10.0).
+                                        fillColor(Color.GREEN).
+                                        strokeColor(Color.RED).
+                                        strokeWidth(4).
+                                        clickable(true));
+                    } // adding circle on map
+                });
+            }
+            finish();
+            Intent intent = new Intent(this,MapsActivity.class);
+            startActivity(intent);
+        });
+
         dialog.setView(registerWindow);
 
+
         dialog.setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss();
-        });
-        dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
-            MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
-            Market market = new Market(Objects.requireNonNull(namemarket.getText()).toString(),latitude,longitude);
-            market.setOwner(DataBase.ActiveSessionUser.getName() +
-                    " E-mail: " + DataBase.ActiveSessionUser.getEmail());
-                    if (TextUtils.isEmpty(namemarket.toString())) {
-                        Snackbar.make(constraintLayout, "Input name", Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-                    // adding market with email user
-                    String Uid = FirebaseAuth.getInstance().getUid();
-                    if(Uid == null){
-                        return;
-                    }
-                    Map<String,Object> data = new HashMap<>();
-                    DataBase.ActiveSessionUser.getMarkets().add(market);
-                    DataBase.reference.child(Uid).removeValue();
-                    data.put(Uid,DataBase.ActiveSessionUser);
-                    DataBase.reference.updateChildren(data).addOnSuccessListener(unused -> {
-                        DataBase.users.get(DataBase.users.size()-1).getMarkets().add(market);
-                        {
-                            googleMap.addCircle(
-                                    new CircleOptions().center(
-                                            new LatLng(
-                                                    market.getLatitude(),
-                                                    market.getLongitude())).
-                                            radius(10.0).
-                                            fillColor(Color.GREEN).
-                                            strokeColor(Color.RED).
-                                            strokeWidth(4).
-                                            clickable(true));
-                        } // adding circle on map
-                    });
-                });
+            dialog1.dismiss(); });
+
         dialog.show();
     }
 

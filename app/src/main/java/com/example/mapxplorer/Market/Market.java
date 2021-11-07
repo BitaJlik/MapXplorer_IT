@@ -1,5 +1,6 @@
 package com.example.mapxplorer.Market;
 
+import android.media.Image;
 import android.widget.ImageView;
 
 import com.example.mapxplorer.R;
@@ -14,7 +15,11 @@ public class Market {
     private double latitude;
     private double longitude;
     private String owner;
+    private String email;
+    private String openTime;
+    private Image image;
 
+    // TODO: 07.11.2021 Make image for infoMarket
     public Market(){
         products = new ArrayList<>();
     }
@@ -35,9 +40,14 @@ public class Market {
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public String getID(){return String.valueOf(latitude)+String.valueOf(longitude);}
-    public void setOwner(String s) { owner = s; }
+    public void setOwner(String owner) { this.owner = owner; }
     public String getOwner(){ return owner; }
-
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getOpenTime() { return openTime; }
+    public void setOpenTime(String openTime) { this.openTime = openTime; }
+    public Image getImage() { return image; }
+    public void setImage(Image image) { this.image = image;}
 
     @Override public String toString() {
         return "Market{" +

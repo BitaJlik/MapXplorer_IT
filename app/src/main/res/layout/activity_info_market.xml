@@ -10,7 +10,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="404dp"
+        android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:text="openTime"
-            android:textSize="25sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.074"
@@ -55,12 +55,20 @@
             app:layout_constraintVertical_bias="0.033" />
 
         <TextView
-            android:id="@+id/contactInfo"
+            android:id="@+id/contactInfoOwner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="emailandTelephone"
-            android:textSize="25sp" />
+            android:text="Owner"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/contactInfoEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="email"
+            android:textSize="20sp" />
 
         <Button
             android:layout_gravity="center"

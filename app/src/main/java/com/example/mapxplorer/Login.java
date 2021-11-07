@@ -34,7 +34,6 @@ public class Login extends AppCompatActivity {
 
         ValueEventListener listener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 for( DataSnapshot snapuser : snapshot.getChildren()){ // UiD User
                     User user = snapuser.getValue(User.class);
                     if(user == null) break;
@@ -54,7 +53,7 @@ public class Login extends AppCompatActivity {
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
         DataBase.reference.addValueEventListener(listener);
-        
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
