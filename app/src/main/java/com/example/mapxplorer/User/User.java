@@ -1,12 +1,13 @@
 package com.example.mapxplorer.User;
 
-import com.example.mapxplorer.Market;
+import com.example.mapxplorer.Market.Market;
 
 import java.util.ArrayList;
 
 public class User {
     private String name,pass,email;
     private ArrayList<Market> markets;
+    private int sizeMaxMarkets = 3;
     public User(){
         markets = new ArrayList<>();
     }
@@ -33,6 +34,8 @@ public class User {
     public void setPassword(String pass) { this.pass = pass; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+    public int getSizeMaxMarkets() { return sizeMaxMarkets; }
+    public void setSizeMaxMarkets(int sizeMaxMarkets) { this.sizeMaxMarkets = sizeMaxMarkets; }
 
     @Override
     public String toString() {
@@ -41,6 +44,7 @@ public class User {
                 ", pass='" + pass +
                 ", email='" + email +
                 ", market=" + markets + '\n' +
+                sizeMaxMarkets +
                 '}';
     }
 }

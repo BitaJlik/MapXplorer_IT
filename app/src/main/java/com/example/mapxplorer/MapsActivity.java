@@ -7,14 +7,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.mapxplorer.User.User;
+import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +27,8 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -102,9 +98,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if(market.getLatitude() == circle.getCenter().latitude &&
                market.getLongitude() == circle.getCenter().longitude){
                 DataBase.ActiveShowingMarket = market;
-                Intent intent = new Intent(this,ShowProductsInMarket.class);
-                startActivity(intent);
-                break;
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                LayoutInflater inflater = LayoutInflater.from(this);
+                View info = inflater.inflate(R.layout.activity_info_market,null);
+                dialog.setView(info);
+                Button button = info.findViewById(R.id.toProducts);
+                TextView nameMarket = info.findViewById(R.id.nameMarket);
+                TextView infoMarket = info.findViewById(R.id.contactInfo);
+                nameMarket.setText(DataBase.ActiveShowingMarket.getNameMarket());
+                infoMarket.setText(DataBase.ActiveShowingMarket.getOwner());
+                button.setOnClickListener(v -> {
+                    Intent intent = new Intent(this, ShowProductsInMarket.class);
+                    startActivity(intent);
+                });
+                dialog.show();
             }
         }
 
@@ -129,6 +136,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
             MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
             Market market = new Market(Objects.requireNonNull(namemarket.getText()).toString(),latitude,longitude);
+            market.setOwner(DataBase.ActiveSessionUser.getName() +
+                    " E-mail: " + DataBase.ActiveSessionUser.getEmail());
                     if (TextUtils.isEmpty(namemarket.toString())) {
                         Snackbar.make(constraintLayout, "Input name", Snackbar.LENGTH_SHORT).show();
                         return;

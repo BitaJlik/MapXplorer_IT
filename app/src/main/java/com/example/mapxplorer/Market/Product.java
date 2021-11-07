@@ -1,4 +1,4 @@
-package com.example.mapxplorer;
+package com.example.mapxplorer.Market;
 
 public class Product implements Comparable<Product> {
     private String nameProduct;

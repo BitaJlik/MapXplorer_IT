@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mapxplorer.Market.Market;
+import com.example.mapxplorer.Market.Product;
+
 import java.util.ArrayList;
 
 public class ShowProductsInMarket extends AppCompatActivity {

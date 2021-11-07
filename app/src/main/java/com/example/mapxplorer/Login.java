@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.User.User;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,6 +54,7 @@ public class Login extends AppCompatActivity {
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
         DataBase.reference.addValueEventListener(listener);
+        
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

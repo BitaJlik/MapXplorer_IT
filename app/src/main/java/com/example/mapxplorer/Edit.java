@@ -11,6 +11,8 @@ import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mapxplorer.Market.Market;
+import com.example.mapxplorer.Market.Product;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;

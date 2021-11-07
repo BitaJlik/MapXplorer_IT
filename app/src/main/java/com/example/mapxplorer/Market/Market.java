@@ -1,8 +1,9 @@
-package com.example.mapxplorer;
+package com.example.mapxplorer.Market;
 
-import androidx.annotation.NonNull;
+import android.widget.ImageView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.mapxplorer.R;
+import com.example.mapxplorer.User.User;
 
 import java.util.ArrayList;
 
@@ -12,6 +13,7 @@ public class Market {
     private ArrayList<Product> products ;
     private double latitude;
     private double longitude;
+    private String owner;
 
     public Market(){
         products = new ArrayList<>();
@@ -33,8 +35,11 @@ public class Market {
     public double getLongitude() { return longitude; }
     public void setLongitude(double longitude) { this.longitude = longitude; }
     public String getID(){return String.valueOf(latitude)+String.valueOf(longitude);}
-        @Override
-    public String toString() {
+    public void setOwner(String s) { owner = s; }
+    public String getOwner(){ return owner; }
+
+
+    @Override public String toString() {
         return "Market{" +
                 "\nnameMarket='" + nameMarket  +
                 ", products=" + products +
