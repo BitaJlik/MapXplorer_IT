@@ -1,11 +1,15 @@
 package com.example.mapxplorer;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,9 +35,14 @@ public class Login extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        if(!isOnline(this)){
+            Toast.makeText(this,"No Internet Connection\nPlease restart App",Toast.LENGTH_LONG).show();
+        }
         ValueEventListener listener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(MapsActivity.googleMap != null){
+                    MapsActivity.googleMap.clear();
+                }
                 for( DataSnapshot snapuser : snapshot.getChildren()){ // UiD User
                     User user = snapuser.getValue(User.class);
                     if(user == null) break;
@@ -49,6 +58,7 @@ public class Login extends AppCompatActivity {
                 for(int i = 0;i < DataBase.users.size();i++){
                     System.out.println(DataBase.users.get(i));
                 }
+                MapsActivity.initMarkets();
             }
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
@@ -69,6 +79,13 @@ public class Login extends AppCompatActivity {
 
 
     }
+    public static boolean isOnline(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
     private void login(){
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle("LogIn");

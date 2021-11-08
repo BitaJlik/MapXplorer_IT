@@ -1,22 +1,25 @@
 package com.example.mapxplorer;
 
-import android.content.DialogInterface;
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.mapxplorer.Market.Market;
@@ -39,8 +42,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
-    private GoogleMap googleMap;
+    public static GoogleMap googleMap;
     ConstraintLayout constraintLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,21 +60,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Button addMarket = findViewById(R.id.addMarket);
         Button listMarkets = findViewById(R.id.list);
-        if(DataBase.ActiveSessionUser.getEmail().equals("NULL")){
+        if (DataBase.ActiveSessionUser.getEmail().equals("NULL")) {
             addMarket.setClickable(false);
             addMarket.setAlpha(0);
-        }
-        else addMarket.setOnClickListener(v -> addMarket());
+        } else addMarket.setOnClickListener(v -> addMarket());
         listMarkets.setOnClickListener(v -> list());
         constraintLayout = findViewById(R.id.constraintLayout);
 
+        LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000,
+                2000, loc);
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        this.googleMap = googleMap;
+        MapsActivity.googleMap = googleMap;
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this,R.raw.style_json));
         // create point on VNTU
         LatLng vinnitsa = new LatLng(49.2344160049607, 28.411152669550056);
@@ -81,20 +96,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // add listener for opening shops
         googleMap.setOnCircleClickListener(this);
         // add circles from DB on map like markets
-        for(Market market : DataBase.getAllMarkets()){
-            googleMap.addCircle(
-                    new CircleOptions().center(
-                            new LatLng(
-                                    market.getLatitude(),
-                                    market.getLongitude())).
-                            radius(10.0).
-                            fillColor(Color.GREEN).
-                            strokeColor(Color.RED).
-                            strokeWidth(4).
-                            clickable(true));
-        }
-
-
+        initMarkets();
+    }
+    public static void initMarkets(){
+       if(googleMap != null){
+           for(Market market : DataBase.getAllMarkets()){
+               googleMap.addCircle(
+                       new CircleOptions().center(
+                               new LatLng(
+                                       market.getLatitude(),
+                                       market.getLongitude())).
+                               radius(10.0).
+                               fillColor(Color.GREEN).
+                               strokeColor(Color.RED).
+                               strokeWidth(4).
+                               clickable(true));
+           }
+       }
     }
 
     @Override
@@ -126,6 +144,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void addMarket() {
         if(DataBase.ActiveSessionUser.getMarkets().size() == DataBase.ActiveSessionUser.getSizeMaxMarkets()){
             Snackbar.make(constraintLayout,"Reached maximum limit markets \n Pay for more :) ",Snackbar.LENGTH_LONG).show();
@@ -137,7 +156,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        AlertDialog alertDialog = dialog.create();
         dialog.setTitle("Adding new Market");
         dialog.setMessage("Input on these inputs");
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -267,8 +285,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dialog.setView(registerWindow);
 
 
-        dialog.setNegativeButton("Cancel", (dialog1, which) -> {
-            dialog1.dismiss(); });
+        dialog.setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
 
         dialog.show();
     }
@@ -279,5 +296,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         startActivity(intent);
     }
 
+    private final LocationListener loc = location -> {
+        System.out.println("+++" + location.getLatitude());
+    };
 
 }
