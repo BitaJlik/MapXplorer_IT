@@ -35,34 +35,6 @@ public class Login extends AppCompatActivity {
     ConstraintLayout constraintLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(!isOnline(this)){
-            Toast.makeText(this,"No Internet Connection\nPlease restart App",Toast.LENGTH_LONG).show();
-        }
-        ValueEventListener listener = new ValueEventListener() {
-            @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(MapsActivity.googleMap != null){
-                    MapsActivity.googleMap.clear();
-                }
-                for( DataSnapshot snapuser : snapshot.getChildren()){ // UiD User
-                    User user = snapuser.getValue(User.class);
-                    if(user == null) break;
-                    DataBase.users.add(user); // adding in LOCAL DB
-                    ArrayList<Market> markets = new ArrayList<>(); // Markets for user
-                    // getting from ONLINE DB from user markets
-                    for(DataSnapshot dataSnapshot : snapuser.child("markets").getChildren()){
-                        Market market = dataSnapshot.getValue(Market.class);
-                        markets.add(market);
-                    }
-                    user.setMarkets(markets);
-                }
-                for(int i = 0;i < DataBase.users.size();i++){
-                    System.out.println(DataBase.users.get(i));
-                }
-                MapsActivity.initMarkets();
-            }
-            @Override public void onCancelled(@NonNull DatabaseError error) { }
-        };
-        DataBase.reference.addValueEventListener(listener);
 
 
         super.onCreate(savedInstanceState);
@@ -78,12 +50,6 @@ public class Login extends AppCompatActivity {
         viewer.setOnClickListener(v -> nextActivity());
 
 
-    }
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
     private void login(){
@@ -126,6 +92,7 @@ public class Login extends AppCompatActivity {
         dialog.show();
     }
     private void showRegisterCard() {
+        // TODO: 09.11.2021 Replace ALL AlertDialog  on DialogFragment for visibility
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
         dialog.setTitle("Registration");

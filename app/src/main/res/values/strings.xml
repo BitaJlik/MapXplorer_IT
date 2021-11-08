@@ -27,6 +27,14 @@
     <string name="input_name_market">Name market</string>
     <string name="Viewer">Viewer</string>
     <string name="to_products">To Products!</string>
+    <string name="map">Map</string>
+    <string name="list">List</string>
+    <string name="exit">Exit</string>
+    <string name="logout">LogOut</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="User">User</string>
+    <string name="add_market">Add market</string>
 
 
 </resources>
