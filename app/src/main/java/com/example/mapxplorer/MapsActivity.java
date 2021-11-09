@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -34,14 +35,14 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DataBase.auth.signInAnonymously();
+        DataBase.auth.signInWithEmailAndPassword("help@mgmail.com","qweqwe");
         if(!isOnline(this)){
             Toast.makeText(this,"No Internet Connection\nPlease restart App",Toast.LENGTH_LONG).show();
         }
         ValueEventListener listener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(Maps.googleMap != null){
-                    Maps.googleMap.clear();
+                    DataBase.users.clear();
                 }
                 for( DataSnapshot snapuser : snapshot.getChildren()){ // UiD User
                     User user = snapuser.getValue(User.class);
@@ -107,7 +108,7 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new LoginFragment()).commit();
                 break;
             case R.id.nav_List:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new ListFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new SearchFragment()).commit();
                 break;
 
         }

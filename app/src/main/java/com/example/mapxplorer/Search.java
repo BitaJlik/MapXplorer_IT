@@ -1,53 +1,36 @@
 package com.example.mapxplorer;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.ListFragment;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mapxplorer.Market.Market;
+import com.example.mapxplorer.Market.Product;
 
 import java.util.ArrayList;
 
 
 public class Search extends AppCompatActivity {
-    ArrayAdapter<String> adapter;
-    private ArrayList<String> arrayList;
-    EditText search;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
-        arrayList = new ArrayList<>();
-        search = findViewById(R.id.searchText);
-        init();
-        ListView listView = findViewById(R.id.list);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,arrayList);
-        listView.setOnItemClickListener((parent, view, position, id) -> System.out.println("+++" + arrayList.get(position)));
-        search.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.getFilter().filter(s.toString());
-            }
-            @Override public void afterTextChanged(Editable s) { }
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-        });
-        Intent intent = new Intent(this, ShowProductsInMarket.class);
-        listView.setOnItemClickListener((parent, view, position, id) -> {
-            DataBase.ActiveShowingMarket = DataBase.getAllMarkets().get(position);
-            startActivity(intent);
-        });
-        listView.setAdapter(adapter);
-        listView.setTextFilterEnabled(true);
-    }
-    public void init(){
-        arrayList.clear();
-        for(int i =0;i< DataBase.getAllMarkets().size();i++){
-            arrayList.add(DataBase.getAllMarkets().get(i).getNameMarket());
-        }
-    }
 }

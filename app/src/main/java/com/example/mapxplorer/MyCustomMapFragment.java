@@ -35,7 +35,7 @@ import java.util.Objects;
 
 public class MyCustomMapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
     private static Context thisContext;
-    private static GoogleMap googleMap;
+    public static GoogleMap googleMap;
 
 
     @Override
@@ -52,6 +52,8 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
         getMapAsync(this);
 
     }
+
+
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
