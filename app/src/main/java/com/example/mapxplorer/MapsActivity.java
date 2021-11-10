@@ -2,20 +2,15 @@ package com.example.mapxplorer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -23,21 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.fragment.app.ListFragment;
 
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.User.User;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
-import com.example.mapxplorer.databinding.AddMarketBinding;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
@@ -54,16 +43,15 @@ import java.util.Map;
 import java.util.Objects;
 
 public class MapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public static boolean isViewMap = true;
     private DrawerLayout drawer;
-    ConstraintLayout constraintLayout;
-    View view;
+    public static NavigationView view;
     ActionBarDrawerToggle toggle;
     int sizeUsers = 0;
     int sizeMarkets = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        DataBase.auth.signInWithEmailAndPassword("help@mgmail.com","qweqwe");
         if(!isOnline(this)){
             Toast.makeText(this,"No Internet Connection\nPlease restart App",Toast.LENGTH_LONG).show();
         }
@@ -107,9 +95,9 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView view = findViewById(R.id.nav_view);
-        this.view = view;
+        MapsActivity.view = view;
         view.setNavigationItemSelectedListener(this);
-         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         view.setCheckedItem(R.id.nav_Map);
@@ -138,28 +126,31 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.commit();
         switch (item.getItemId()){
             case R.id.nav_Map:
-                goToMap();
+                fragmentTransaction.replace(R.id.fragment, fragment);
+                isViewMap = true;
                 break;
             case R.id.nav_Login:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new LoginFragment()).commit();
+                isViewMap = false;
                 break;
             case R.id.nav_List:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new SearchFragment()).commit();
+                isViewMap = false;
                 break;
             case R.id.add:
                 addMarket();
                 break;
             case R.id.nav_exit:
+                DataBase.auth.signOut();
                 DataBase.users.clear();
                 MyCustomMapFragment.clear();
+                finish();
                 break;
         }
         drawer.closeDrawers();
         return true;
     }
-    public static void goToMap(){
-        fragmentTransaction.replace(R.id.fragment, fragment);
-    }
+
    @SuppressLint("SetTextI18n")
     public void addMarket() {
         if(DataBase.ActiveSessionUser.getEmail().equals("NULL")) return;
@@ -167,6 +158,8 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
             Snackbar.make(this,view,"Reached maximum limit markets \nPay for more :) ",Snackbar.LENGTH_LONG).show();
             return;
         }
+        if(!isViewMap) return;
+        if(Objects.requireNonNull(DataBase.auth.getCurrentUser()).isAnonymous()) return;
         double latitude = MyCustomMapFragment.getLatitude();
         double longitude = MyCustomMapFragment.getLongitude();
 
@@ -279,7 +272,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                 DataBase.reference.child(Uid).removeValue();
                 data.put(Uid,DataBase.ActiveSessionUser);
                 DataBase.reference.updateChildren(data).addOnSuccessListener(unused -> {
-                    DataBase.users.get(DataBase.users.size()-1).getMarkets().add(market);
                     {
                         MyCustomMapFragment.googleMap.addCircle(
                                 new CircleOptions().center(

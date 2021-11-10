@@ -80,8 +80,9 @@ public class LoginFragment extends Fragment {
                                 break;
                             }
                         }
-                        getParentFragmentManager().beginTransaction().
-                                replace(R.id.fragment, MapsActivity.fragment).commit();
+                        MapsActivity.isViewMap = true;
+                        MapsActivity.view.setCheckedItem(R.id.nav_Map);
+                        getParentFragmentManager().beginTransaction().replace(R.id.fragment, MapsActivity.fragment).commit();
                     }).addOnFailureListener(e -> Snackbar.make(constraintLayout, "Incorrect pass or email", Snackbar.LENGTH_LONG).show());
         });
         dialog.show();
