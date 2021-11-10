@@ -80,6 +80,7 @@ public class LoginFragment extends Fragment {
                                 break;
                             }
                         }
+                        MapsActivity.setHeader();
                         MapsActivity.isViewMap = true;
                         MapsActivity.view.setCheckedItem(R.id.nav_Map);
                         getParentFragmentManager().beginTransaction().replace(R.id.fragment, MapsActivity.fragment).commit();

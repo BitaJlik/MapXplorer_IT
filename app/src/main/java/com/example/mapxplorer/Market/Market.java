@@ -7,8 +7,8 @@ import com.example.mapxplorer.R;
 import com.example.mapxplorer.User.User;
 
 import java.util.ArrayList;
-
 public class Market {
+    public enum SizeMarket {SMALL,MEDIUM,LARGE,BIG}
 
     private String nameMarket;
     private ArrayList<Product> products ;
@@ -18,6 +18,7 @@ public class Market {
     private String email;
     private String openTime;
     private Image image;
+    private SizeMarket sizeMarket;
 
     // TODO: 07.11.2021 Make image for infoMarket
     public Market(){
@@ -48,6 +49,8 @@ public class Market {
     public void setOpenTime(String openTime) { this.openTime = openTime; }
     public Image getImage() { return image; }
     public void setImage(Image image) { this.image = image;}
+    public SizeMarket getSizeMarket() { return sizeMarket; }
+    public void setSizeMarket(SizeMarket sizeMarket) { this.sizeMarket = sizeMarket; }
 
     @Override public String toString() {
         return "Market{" +

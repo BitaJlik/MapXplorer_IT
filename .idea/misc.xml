@@ -26,20 +26,24 @@
         <entry key="..\:/Try/MapXplorer/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22135416666666666" />
         <entry key="..\:/Try/MapXplorer/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.22135416666666666" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/drawable/gradient_login.xml" value="0.3828125" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/drawable/ic_lock.xml" value="0.3828125" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/drawable/login_gradient.xml" value="0.3828125" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout-v23/activity_login.xml" value="0.20520833333333333" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_edit.xml" value="0.36666666666666664" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_info_market.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_main_map.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_maps.xml" value="0.33" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_search.xml" value="0.33" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_show_markets.xml" value="0.36666666666666664" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/add_market.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/item.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/itemMarket.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/item_market.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/login_window.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/maps_activity.xml" value="0.36666666666666664" />
-        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/nav_header.xml" value="0.25" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/nav_header.xml" value="0.33" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/menu/drawer_menu.xml" value="0.5" />
       </map>
     </option>

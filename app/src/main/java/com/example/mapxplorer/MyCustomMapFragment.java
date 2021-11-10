@@ -18,13 +18,16 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MyCustomMapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnCircleClickListener {
+public class MyCustomMapFragment extends SupportMapFragment implements OnMapReadyCallback, GoogleMap.OnGroundOverlayClickListener {
     @SuppressLint("StaticFieldLeak")
     private static Context thisContext;
     public static GoogleMap googleMap;
@@ -53,12 +56,14 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(thisContext,R.raw.style_json));
         // create point on VNTU
         LatLng vinnitsa = new LatLng(49.2344160049607, 28.411152669550056);
+        MarkerOptions markerOptions = new MarkerOptions().position(vinnitsa).title("Тута ВНТУ");
+
         // add marker on map by point
-        googleMap.addMarker(new MarkerOptions().position(vinnitsa).title("Тута ВНТУ"));
+        googleMap.addMarker(markerOptions);
         // focus on this point
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vinnitsa,16.0f));
         // add listener for opening shops
-        googleMap.setOnCircleClickListener(this);
+        googleMap.setOnGroundOverlayClickListener(this);
         // add circles from DB on map like markets
         drawMarkets();
     }
@@ -70,27 +75,30 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
         }
         if(googleMap != null){
             for(Market market : DataBase.getAllMarkets()){
-                CircleOptions circleOptions = new CircleOptions().center(
-                        new LatLng(
-                                market.getLatitude(),
-                                market.getLongitude())).
-                        radius(10.0).
-                        fillColor(Color.GREEN).
-                        strokeColor(Color.RED).
-                        strokeWidth(4).
-                        clickable(true);
-                DataBase.circles.add(googleMap.addCircle(circleOptions));
+                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                        new LatLng(market.getLatitude(),market.getLongitude()),100,100)
+                        .image(BitmapDescriptorFactory.fromResource(R.drawable.v)).clickable(true));
 
+//                CircleOptions circleOptions = new CircleOptions().center(
+//                        new LatLng(
+//                                market.getLatitude(),
+//                                market.getLongitude())).
+//                        radius(10.0).
+//                        fillColor(Color.GREEN).
+//                        strokeColor(Color.RED).
+//                        strokeWidth(4).
+//                        clickable(true);
+//                DataBase.circles.add(googleMap.addCircle(circleOptions));
             }
         }
     }
-    public static   void clear(){
+    public static void clear(){
         googleMap.clear();
     }
-    @Override public void onCircleClick(@NonNull Circle circle) {
+    @Override public void onGroundOverlayClick (@NonNull GroundOverlay groundOverlay) {
         for(Market market : DataBase.getAllMarkets()){
-            if(market.getLatitude() == circle.getCenter().latitude &&
-                    market.getLongitude() == circle.getCenter().longitude){
+            if(market.getLatitude() == groundOverlay.getPosition().latitude &&
+                    market.getLongitude() == groundOverlay.getPosition().longitude){
                 DataBase.ActiveShowingMarket = market;
                 AlertDialog.Builder dialog = new AlertDialog.Builder(thisContext);
                 LayoutInflater inflater = LayoutInflater.from(thisContext);
@@ -120,4 +128,6 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
     public static double getLongitude(){
         return googleMap.getCameraPosition().target.longitude;
     }
+
+
 }
