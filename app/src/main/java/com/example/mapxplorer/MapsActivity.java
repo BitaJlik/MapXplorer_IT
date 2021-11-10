@@ -2,36 +2,64 @@ package com.example.mapxplorer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.ListFragment;
 
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.User.User;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
+import com.example.mapxplorer.databinding.AddMarketBinding;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-public class MapsActivity extends AppCompatActivity implements  NavigationView.OnNavigationItemSelectedListener {
+public class MapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     ConstraintLayout constraintLayout;
+    View view;
+    ActionBarDrawerToggle toggle;
+    int sizeUsers = 0;
+    int sizeMarkets = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +69,9 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
         }
         ValueEventListener listener = new ValueEventListener() {
             @Override public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(Maps.googleMap != null){
                     DataBase.users.clear();
-                }
+                    MyCustomMapFragment.clear();
+
                 for( DataSnapshot snapuser : snapshot.getChildren()){ // UiD User
                     User user = snapuser.getValue(User.class);
                     if(user == null) break;
@@ -59,7 +87,12 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
                 for(int i = 0;i < DataBase.users.size();i++){
                     System.out.println(DataBase.users.get(i));
                 }
-                MyCustomMapFragment.initMarkets();
+                if(sizeMarkets <= DataBase.getAllMarkets().size() | sizeUsers <= DataBase.users.size()){
+
+                    MyCustomMapFragment.drawMarkets();
+                    sizeMarkets = DataBase.getAllMarkets().size();
+                    sizeUsers = DataBase.users.size();
+                }
             }
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         };
@@ -74,10 +107,12 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView view = findViewById(R.id.nav_view);
+        this.view = view;
         view.setNavigationItemSelectedListener(this);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        view.setCheckedItem(R.id.nav_Map);
         toggle.syncState();
         onNavigationItemSelected(view.getMenu().findItem(R.id.nav_Map));
 
@@ -92,17 +127,18 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
         }
     }
 
-
+    public static FragmentTransaction fragmentTransaction;
+    @SuppressLint("StaticFieldLeak")
+    public static MyCustomMapFragment fragment;
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        MyCustomMapFragment fragment = new MyCustomMapFragment();
-        FragmentTransaction fragmentTransaction =
-                getSupportFragmentManager().beginTransaction();
+        fragment = new MyCustomMapFragment();
+        fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.commit();
         switch (item.getItemId()){
             case R.id.nav_Map:
-                fragmentTransaction.replace(R.id.fragment, fragment);
+                goToMap();
                 break;
             case R.id.nav_Login:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new LoginFragment()).commit();
@@ -110,9 +146,157 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
             case R.id.nav_List:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment,new SearchFragment()).commit();
                 break;
-
+            case R.id.add:
+                addMarket();
+                break;
+            case R.id.nav_exit:
+                DataBase.users.clear();
+                MyCustomMapFragment.clear();
+                break;
         }
+        drawer.closeDrawers();
         return true;
+    }
+    public static void goToMap(){
+        fragmentTransaction.replace(R.id.fragment, fragment);
+    }
+   @SuppressLint("SetTextI18n")
+    public void addMarket() {
+        if(DataBase.ActiveSessionUser.getEmail().equals("NULL")) return;
+        if(DataBase.ActiveSessionUser.getMarkets().size() == DataBase.ActiveSessionUser.getSizeMaxMarkets()){
+            Snackbar.make(this,view,"Reached maximum limit markets \nPay for more :) ",Snackbar.LENGTH_LONG).show();
+            return;
+        }
+        double latitude = MyCustomMapFragment.getLatitude();
+        double longitude = MyCustomMapFragment.getLongitude();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Adding new Market");
+        builder.setMessage("Input on these inputs");
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View registerWindow = inflater.inflate(R.layout.add_market,null,false);
+
+        EditText openHours = registerWindow.findViewById(R.id.openHours);
+        EditText openMinutes = registerWindow.findViewById(R.id.openMinutes);
+        EditText closingHours = registerWindow.findViewById(R.id.closingHours);
+        EditText closingMinutes = registerWindow.findViewById(R.id.closingMinutes);
+        MaterialEditText namemarket = registerWindow.findViewById(R.id.nameInput);
+
+        openHours.setText("00");
+        openMinutes.setText("00");
+        closingHours.setText("23");
+        closingMinutes.setText("59");
+        builder.create();
+
+        openHours.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(openHours.getText().toString()) > 23){
+                        openHours.setText(String.valueOf(23));
+                    }
+                }
+                catch (NumberFormatException e){
+                    openHours.setText(String.valueOf(0));
+                }
+
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        closingHours.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(closingHours.getText().toString()) > 23){
+                        closingHours.setText(String.valueOf(23));
+                    }
+                }
+                catch (NumberFormatException e){
+                    closingHours.setText(String.valueOf(0));
+                }
+            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+            @Override public void afterTextChanged(Editable s) {
+
+            }
+        });
+        openMinutes.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(openMinutes.getText().toString()) > 59){
+                        openMinutes.setText(String.valueOf(59));
+                    }
+                }
+                catch (NumberFormatException e){
+                    openMinutes.setText(String.valueOf(0));
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        closingMinutes.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if(Integer.parseInt(closingMinutes.getText().toString()) > 59){
+                        closingMinutes.setText(String.valueOf(59));
+                    }
+                }
+                catch (NumberFormatException e){
+                    closingMinutes.setText(String.valueOf(0));
+                }
+            }
+
+            @Override public void afterTextChanged(Editable s) { }
+        });
+        builder.setView(registerWindow);
+        builder.setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            Market market = new Market(Objects.requireNonNull(namemarket.getText()).toString(),latitude,longitude);
+            market.setOwner(DataBase.ActiveSessionUser.getName());
+            market.setEmail(DataBase.ActiveSessionUser.getEmail());
+            market.setOpenTime(openHours.getText().toString() +":"+openMinutes.getText().toString() + " — " +
+                    closingHours.getText().toString() + ":" + closingMinutes.getText().toString());
+            if (namemarket.getText().toString().length() > 2) {
+                // adding market with email user
+                String Uid = FirebaseAuth.getInstance().getUid();
+                if(Uid == null){
+                    return;
+                }
+                Map<String,Object> data = new HashMap<>();
+                DataBase.ActiveSessionUser.getMarkets().add(market);
+                DataBase.reference.child(Uid).removeValue();
+                data.put(Uid,DataBase.ActiveSessionUser);
+                DataBase.reference.updateChildren(data).addOnSuccessListener(unused -> {
+                    DataBase.users.get(DataBase.users.size()-1).getMarkets().add(market);
+                    {
+                        MyCustomMapFragment.googleMap.addCircle(
+                                new CircleOptions().center(
+                                        new LatLng(
+                                                market.getLatitude(),
+                                                market.getLongitude())).
+                                        radius(10.0).
+                                        fillColor(Color.GREEN).
+                                        strokeColor(Color.RED).
+                                        strokeWidth(4).
+                                        clickable(true));
+                    } // adding circle on map
+                });
+            }
+            dialog.dismiss();
+        });
+        builder.show();
     }
     public static boolean isOnline(Context context) {
         ConnectivityManager cm =
@@ -120,4 +304,5 @@ public class MapsActivity extends AppCompatActivity implements  NavigationView.O
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
 }

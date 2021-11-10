@@ -2,6 +2,8 @@ package com.example.mapxplorer;
 
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.User.User;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -16,7 +18,7 @@ public class DataBase {
     static User ActiveSessionUser = new User("NULL","NULL","NULL");
     static Market ActiveShowingMarket = new Market("NULL",0,0);
     static ArrayList<User> users = new ArrayList<>();
-
+    static ArrayList<Circle> circles = new ArrayList<>();
     static String idMarket;
 
     public static ArrayList<Market> getAllMarkets(){
@@ -28,6 +30,7 @@ public class DataBase {
         }
         return markets;
     }
+
 
 
 
