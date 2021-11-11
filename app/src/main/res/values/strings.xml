@@ -37,6 +37,8 @@
     <string name="add_market">Add market</string>
     <string name="size_your_market">Size your market : </string>
     <string name="wait_a_second_and_go_to_map">if you dont see, wait a second, and go to map</string>
+    <string name="image">image</string>
+    <string name="satellite">Satellite</string>
 
 
 </resources>

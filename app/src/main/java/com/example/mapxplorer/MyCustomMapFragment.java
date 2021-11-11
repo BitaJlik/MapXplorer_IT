@@ -50,7 +50,7 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
     public void onMapReady(GoogleMap googleMap) {
         MyCustomMapFragment.googleMap = googleMap;
 
-        googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         assert thisContext != null;
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(thisContext,R.raw.style_json));
@@ -75,20 +75,26 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
         }
         if(googleMap != null){
             for(Market market : DataBase.getAllMarkets()){
-                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
-                        new LatLng(market.getLatitude(),market.getLongitude()),100,100)
-                        .image(BitmapDescriptorFactory.fromResource(R.drawable.v)).clickable(true));
-
-//                CircleOptions circleOptions = new CircleOptions().center(
-//                        new LatLng(
-//                                market.getLatitude(),
-//                                market.getLongitude())).
-//                        radius(10.0).
-//                        fillColor(Color.GREEN).
-//                        strokeColor(Color.RED).
-//                        strokeWidth(4).
-//                        clickable(true);
-//                DataBase.circles.add(googleMap.addCircle(circleOptions));
+                if(market.getSizeMarket() == Market.SizeMarket.SMALL){
+                    MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                            new LatLng(market.getLatitude(),market.getLongitude()),60,60)
+                            .image(BitmapDescriptorFactory.fromResource(R.drawable.small)).clickable(true));
+                }
+                if(market.getSizeMarket() == Market.SizeMarket.MEDIUM){
+                    MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                            new LatLng(market.getLatitude(),market.getLongitude()),75,75)
+                            .image(BitmapDescriptorFactory.fromResource(R.drawable.medium)).clickable(true));
+                }
+                if(market.getSizeMarket() == Market.SizeMarket.LARGE){
+                    MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                            new LatLng(market.getLatitude(),market.getLongitude()),100,100)
+                            .image(BitmapDescriptorFactory.fromResource(R.drawable.large)).clickable(true));
+                }
+                if(market.getSizeMarket() == Market.SizeMarket.BIG){
+                    MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                            new LatLng(market.getLatitude(),market.getLongitude()),120,120)
+                            .image(BitmapDescriptorFactory.fromResource(R.drawable.big)).clickable(true));
+                }
             }
         }
     }

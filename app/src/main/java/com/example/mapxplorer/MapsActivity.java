@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -38,10 +40,12 @@ import com.example.mapxplorer.databinding.ActivityMapsBinding;
 import com.google.android.gms.dynamic.IObjectWrapper;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -120,7 +124,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-
         Geocoder geocoder = new Geocoder(this);
         final List<Address>[] addresses = new List[1];
         search.setOnSearchClickListener(v -> {
@@ -150,6 +153,17 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
         name = view.getHeaderView(0).findViewById(R.id.nameLoginUser);
         email = view.getHeaderView(0).findViewById(R.id.nameLoginEmail);
+        SwitchCompat switchCompat = view.getHeaderView(0).findViewById(R.id.satellite);
+
+        switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if(switchCompat.isChecked()){
+                MyCustomMapFragment.googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+            }
+            else MyCustomMapFragment.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+
+        });
+
     }
 
     static void setHeader(){

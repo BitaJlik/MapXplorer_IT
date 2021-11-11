@@ -91,7 +91,7 @@ public class LoginFragment extends Fragment {
 
     private void showRegisterCard() {
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(requireContext());
 
         dialog.setTitle("Registration");
         dialog.setMessage("Input on these inputs");
