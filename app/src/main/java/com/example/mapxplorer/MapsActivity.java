@@ -126,19 +126,29 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
 
         Geocoder geocoder = new Geocoder(this);
         final List<Address>[] addresses = new List[1];
-        search.setOnSearchClickListener(v -> {
-            try {
-                addresses[0] = geocoder.getFromLocationName(search.toString(),1);
-            } catch (IOException e) {
-                Log.i("GEO","Not found");
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                try {
+                    addresses[0] = geocoder.getFromLocationName(query,1);
+                } catch (IOException e) {
+                    Log.i("GEO","Not found");
+                }
+                if(addresses[0].size() > 0){
+                    Address address = addresses[0].get(0);
+                    System.out.println("+++");
+                    MyCustomMapFragment.googleMap.moveCamera(CameraUpdateFactory
+                            .newLatLngZoom(new LatLng(address.getLatitude(),address.getLongitude()),16.0f));
+                }
+                return false;
             }
-            if(addresses[0].size() > 0){
-                Address address = addresses[0].get(0);
-                MyCustomMapFragment.googleMap.moveCamera(CameraUpdateFactory
-                        .newLatLngZoom(new LatLng(address.getLatitude(),address.getLongitude()),16.0f));
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
-
         drawer = findViewById(R.id.drawer_layout);
 
         NavigationView view = findViewById(R.id.nav_view);
@@ -154,7 +164,6 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         name = view.getHeaderView(0).findViewById(R.id.nameLoginUser);
         email = view.getHeaderView(0).findViewById(R.id.nameLoginEmail);
         SwitchCompat switchCompat = view.getHeaderView(0).findViewById(R.id.satellite);
-
         switchCompat.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(switchCompat.isChecked()){
                 MyCustomMapFragment.googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
