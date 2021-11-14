@@ -1,6 +1,5 @@
 package com.example.mapxplorer;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,10 +9,8 @@ import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.mapxplorer.User.User;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,7 +42,7 @@ public class LoginFragment extends Fragment {
 
 
     private void login() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder dialog = new AlertDialog.Builder(requireContext());
         dialog.setTitle("LogIn");
         dialog.setMessage("Input on these inputs");
         LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -67,6 +64,8 @@ public class LoginFragment extends Fragment {
                 return;
             }
             // LogIn User from DB
+
+
             DataBase.auth.signInWithEmailAndPassword(
                     Objects.requireNonNull(email.getText()).toString(), password.getText().toString())
                     .addOnSuccessListener(authResult -> {

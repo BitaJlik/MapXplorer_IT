@@ -30,7 +30,9 @@
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/drawable/ic_vector_s.xml" value="0.3828125" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/drawable/login_gradient.xml" value="0.3828125" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout-v23/activity_login.xml" value="0.20520833333333333" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_category_list.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_edit.xml" value="0.36666666666666664" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_edit_category.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_info_market.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_main_map.xml" value="0.36666666666666664" />
@@ -39,6 +41,8 @@
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_show_markets.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/activity_splash.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/add_market.xml" value="0.36666666666666664" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/category_item.xml" value="0.36666666666666664" />
+        <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/fragment_tab.xml" value="0.34692028985507245" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/item.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/itemMarket.xml" value="0.36666666666666664" />
         <entry key="..\:/Try/ShowMeMoreShopping_IT/app/src/main/res/layout/item_market.xml" value="0.36666666666666664" />

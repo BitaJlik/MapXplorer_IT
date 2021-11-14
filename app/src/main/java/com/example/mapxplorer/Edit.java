@@ -3,6 +3,7 @@ package com.example.mapxplorer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -11,23 +12,25 @@ import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mapxplorer.Market.Category;
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.Market.Product;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Edit extends AppCompatActivity {
-    private Market market ;
+    private Category market ;
     private EditText input;
     RadioGroup radioGroup;
     RadioButton radioProduct;
     RadioButton radioPrice;
     RadioButton radioAmount;
     RadioButton radioMarket;
-
+    Button edit;
     private int posItem = 0;
 
 
@@ -43,10 +46,9 @@ public class Edit extends AppCompatActivity {
         radioAmount = findViewById(R.id.radioAmount);
         radioMarket = findViewById(R.id.radioMarket);
         input = findViewById(R.id.editInput);
-        market = DataBase.ActiveShowingMarket;
-
+        edit = findViewById(R.id.edit);
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
-        for(Product product : market.getProducts()){
+        for(Product product : DataBase.category.getProducts()){
             HashMap<String, String> map = new HashMap<>();
             map.put("Product",product.getNameProduct() );
             map.put("Price",  product.getAmount()+"шт     " +product.getPrice() +" Грн");
@@ -59,14 +61,15 @@ public class Edit extends AppCompatActivity {
         listView.setOnItemClickListener((parent, view, position, id) -> {
             System.out.println("+++" + arrayList.get(position));
             posItem = position;
-            input.setText(market.getProducts().get(posItem).getNameProduct());
+            input.setText(DataBase.category.getProducts().get(posItem).getNameProduct());
             radioGroup.clearCheck();
             radioProduct.setChecked(true);
         });
         listView.setAdapter(adapter);
+        market = DataBase.category;
         radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             if(radioMarket.isChecked()){
-                input.setText(market.getNameMarket());
+               // input.setText(market.getNameMarket());
             }
             else input.setText("");
             if (!market.getProducts().isEmpty()) {
@@ -82,6 +85,7 @@ public class Edit extends AppCompatActivity {
             }
 
         });
+
     }
     public void edit(View view){
             if(market.getProducts().isEmpty()){
@@ -97,7 +101,7 @@ public class Edit extends AppCompatActivity {
                 market.getProducts().get(posItem).setAmount(Integer.parseInt(input.getText().toString()));
             }
             else if(radioMarket.isChecked()){
-                market.setNameMarket(input.getText().toString());
+               // market.setNameMarket(input.getText().toString());
             }
 
         String Uid = FirebaseAuth.getInstance().getUid();
@@ -110,7 +114,7 @@ public class Edit extends AppCompatActivity {
         DataBase.reference.child(Uid).child("markets").removeValue();
         DataBase.reference.child(Uid).updateChildren(data);
             finish();
-        Intent intent = new Intent(this,ShowProductsInMarket.class);
+        Intent intent = new Intent(this,Edit.class);
         startActivity(intent);
     }
     public void add(View view){
@@ -123,8 +127,8 @@ public class Edit extends AppCompatActivity {
                 return;
             }
             Map<String,Object> data = new HashMap<>();
-            Market market = DataBase.ActiveShowingMarket;
-            market.getProducts().add(new Product(input.getText().toString(),0,0));
+            Category category = DataBase.category;
+            category.getProducts().add(new Product(input.getText().toString(),0,0));
             ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
             data.put("markets",markets);
             DataBase.reference.child(Uid).child("markets").removeValue();

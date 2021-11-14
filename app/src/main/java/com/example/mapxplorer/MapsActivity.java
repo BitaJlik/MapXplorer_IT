@@ -2,13 +2,11 @@ package com.example.mapxplorer;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,16 +34,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.User.User;
 import com.example.mapxplorer.databinding.ActivityMapsBinding;
-import com.google.android.gms.dynamic.IObjectWrapper;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,12 +50,10 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.zip.Inflater;
 
 public class MapsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static boolean isViewMap = true;
@@ -72,10 +62,13 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle toggle;
     int sizeUsers = 0;
     int sizeMarkets = 0;
+    @SuppressLint("StaticFieldLeak")
     public static TextView name ;
+    @SuppressLint("StaticFieldLeak")
     public static TextView email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         if (!isOnline(this)) {
             Toast.makeText(this, "No Internet Connection\nPlease restart App", Toast.LENGTH_LONG).show();
         }
@@ -259,17 +252,15 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 s[0] = position;
-                System.out.println(s[0]);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                s[0] = 0;
             }
         });
 
@@ -401,55 +392,27 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
                     {
                         switch (market.getSizeMarket()){
                             case SMALL: {
-                                MyCustomMapFragment.googleMap.addCircle(
-                                        new CircleOptions().center(
-                                                new LatLng(
-                                                        market.getLatitude(),
-                                                        market.getLongitude())).
-                                                radius(10.0).
-                                                fillColor(Color.GREEN).
-                                                strokeColor(Color.RED).
-                                                strokeWidth(4).
-                                                clickable(true));
+                                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                                        new LatLng(market.getLatitude(),market.getLongitude()),120,120)
+                                        .image(BitmapDescriptorFactory.fromResource(R.drawable.small)).clickable(true));
                             }
                             break;
                             case MEDIUM: {
-                                MyCustomMapFragment.googleMap.addCircle(
-                                        new CircleOptions().center(
-                                                new LatLng(
-                                                        market.getLatitude(),
-                                                        market.getLongitude())).
-                                                radius(10.0).
-                                                fillColor(Color.GREEN).
-                                                strokeColor(Color.RED).
-                                                strokeWidth(4).
-                                                clickable(true));
+                                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                                        new LatLng(market.getLatitude(),market.getLongitude()),120,120)
+                                        .image(BitmapDescriptorFactory.fromResource(R.drawable.medium)).clickable(true));
                             }
                             break;
                             case LARGE: {
-                                MyCustomMapFragment.googleMap.addCircle(
-                                        new CircleOptions().center(
-                                                new LatLng(
-                                                        market.getLatitude(),
-                                                        market.getLongitude())).
-                                                radius(10.0).
-                                                fillColor(Color.GREEN).
-                                                strokeColor(Color.RED).
-                                                strokeWidth(4).
-                                                clickable(true));
+                                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                                        new LatLng(market.getLatitude(),market.getLongitude()),120,120)
+                                        .image(BitmapDescriptorFactory.fromResource(R.drawable.large)).clickable(true));
                             }
                             break;
                             case BIG: {
-                                MyCustomMapFragment.googleMap.addCircle(
-                                        new CircleOptions().center(
-                                                new LatLng(
-                                                        market.getLatitude(),
-                                                        market.getLongitude())).
-                                                radius(10.0).
-                                                fillColor(Color.GREEN).
-                                                strokeColor(Color.RED).
-                                                strokeWidth(4).
-                                                clickable(true));
+                                MyCustomMapFragment.googleMap.addGroundOverlay(new GroundOverlayOptions().position(
+                                        new LatLng(market.getLatitude(),market.getLongitude()),120,120)
+                                        .image(BitmapDescriptorFactory.fromResource(R.drawable.big)).clickable(true));
                             }
                             break;
                         }
@@ -462,6 +425,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public static boolean isOnline(Context context) {
+
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

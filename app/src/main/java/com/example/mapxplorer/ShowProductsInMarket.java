@@ -8,19 +8,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
+import com.example.mapxplorer.Market.Category;
+import com.example.mapxplorer.Market.CategoryAdapter;
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.Market.Product;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
 public class ShowProductsInMarket extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ArrayList<Product> arrayList;
+    private ArrayList<Product> products;
     private Button sort;
     ProductAdapter.OnClickListener listener;
     @Override
@@ -30,8 +36,8 @@ public class ShowProductsInMarket extends AppCompatActivity {
         setContentView(R.layout.activity_show_markets);
         TextView marketName = findViewById(R.id.nameMarket);
 
-        Button edit = findViewById(R.id.edit); // checking for we have registered user
-        if(DataBase.ActiveSessionUser.getEmail().equals("NULL")){
+        Button edit = findViewById(R.id.editE); // checking for we have registered user
+        if(!DataBase.ActiveSessionUser.getName().equals(DataBase.ActiveShowingMarket.getOwner())){
             edit.setAlpha(0);
             edit.setClickable(false);
         }
@@ -40,13 +46,13 @@ public class ShowProductsInMarket extends AppCompatActivity {
             edit.setClickable(true);
         }
 
-        arrayList = new ArrayList<>();
-        listener = (product, position) ->
-                Toast.makeText(getApplicationContext(), "Вибрано " + product.getNameProduct(),
+        products = new ArrayList<>();
+        listener = (category, position) ->
+                Toast.makeText(getApplicationContext(), "Вибрано " + category.getNameProduct(),
                 Toast.LENGTH_SHORT).show();
 
-        sort = findViewById(R.id.sort);
-        recyclerView = findViewById(R.id.rList);
+        sort =  findViewById(R.id.sort);
+        recyclerView =  findViewById(R.id.rList);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this    );
         RecyclerView.SimpleOnItemTouchListener simple = new RecyclerView.SimpleOnItemTouchListener();
@@ -54,10 +60,9 @@ public class ShowProductsInMarket extends AppCompatActivity {
         recyclerView.addOnItemTouchListener(simple);
         recyclerView.setLayoutManager(layoutManager);
 
-        marketName.setText(DataBase.ActiveShowingMarket.getNameMarket());
+        marketName.setText(DataBase.category.getNameCategory());
         init();
         refresh();
-
         if(!DataBase.ActiveSessionUser.getName().equals("NULL")){
             for(Market market : DataBase.ActiveSessionUser.getMarkets()){
                 if(DataBase.ActiveShowingMarket.getID().equals(market.getID())){
@@ -83,32 +88,30 @@ public class ShowProductsInMarket extends AppCompatActivity {
         startActivity(intent);
     }
     private void init(){
-        arrayList.clear();
-        arrayList.addAll(DataBase.ActiveShowingMarket.getProducts());
+        products.clear();
+        products.addAll(DataBase.category.getProducts());
     }
     private void refresh(){
         init();
-        ProductAdapter adapter = new ProductAdapter(arrayList, listener);
+        ProductAdapter adapter = new ProductAdapter(products, listener);
         recyclerView.setAdapter(adapter);
     }
     int typeSort = 0;
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void sort(View view) {
         typeSort++;
-
         switch (typeSort){
             case 1:
-
-                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareTo);
+                DataBase.category.getProducts().sort(Product::compareTo);
                 sort.setText(R.string.sort_by_price);
                 break;
             case 2:
-                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareAmount);
+                DataBase.category.getProducts().sort(Product::compareAmount);
                 sort.setText(R.string.sort_by_amount);
                 break;
             case 3:
                 typeSort = 0;
-                DataBase.ActiveShowingMarket.getProducts().sort(Product::compareName);
+                DataBase.category.getProducts().sort(Product::compareName);
                 sort.setText(R.string.sort_by_name);
                 break;
         }

@@ -11,7 +11,7 @@ public class Market {
     public enum SizeMarket {SMALL,MEDIUM,LARGE,BIG}
 
     private String nameMarket;
-    private ArrayList<Product> products ;
+    private ArrayList<Category> categories;
     private double latitude;
     private double longitude;
     private String owner;
@@ -20,22 +20,19 @@ public class Market {
     private Image image;
     private SizeMarket sizeMarket;
 
-    // TODO: 07.11.2021 Make image for infoMarket
     public Market(){
-        products = new ArrayList<>();
+        categories = new ArrayList<>();
     }
 
     public Market(String nameMarket, double latitude, double longitude) {
         this.nameMarket = nameMarket;
         this.latitude = latitude;
         this.longitude = longitude;
-        products = new ArrayList<>();
+        categories = new ArrayList<>();
     }
 
     public String getNameMarket() { return nameMarket; }
     public void setNameMarket(String nameMarket) { this.nameMarket = nameMarket; }
-    public ArrayList<Product> getProducts() { return products; }
-    public void setProducts(ArrayList<Product> products){ this.products = products;}
     public double getLatitude() { return latitude; }
     public void setLatitude(double latitude) { this.latitude = latitude; }
     public double getLongitude() { return longitude; }
@@ -51,12 +48,14 @@ public class Market {
     public void setImage(Image image) { this.image = image;}
     public SizeMarket getSizeMarket() { return sizeMarket; }
     public void setSizeMarket(SizeMarket sizeMarket) { this.sizeMarket = sizeMarket; }
+    public ArrayList<Category> getCategories() { return categories; }
+    public void setCategories(ArrayList<Category> categories) { this.categories = categories; }
 
     @Override public String toString() {
         return "Market{" +
                 "\nnameMarket='" + nameMarket  +
-                ", products=" + products +
                 ", latitude=" + latitude +
+                categories.toString() +
                 ", longitude=" + longitude +
                 getID() +
                 '}';
