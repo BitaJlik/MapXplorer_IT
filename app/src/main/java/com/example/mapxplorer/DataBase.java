@@ -19,7 +19,6 @@ public class DataBase {
     static Market ActiveShowingMarket = new Market("NULL",0,0);
     static ArrayList<User> users = new ArrayList<>();
     static ArrayList<Circle> circles = new ArrayList<>();
-    static int categoryPos;
     static Category category = new Category();
 
     public static ArrayList<Market> getAllMarkets(){

@@ -66,7 +66,7 @@ public class EditCategory extends AppCompatActivity {
         if(input.getText().toString().isEmpty()) return;
         Category category = new Category();
         category.setNameCategory(input.getText().toString());
-        DataBase.ActiveShowingMarket.getCategories().add(category);
+        categories.add(category);
 
         refreshDB();
     }
@@ -86,6 +86,7 @@ public class EditCategory extends AppCompatActivity {
     if(Uid == null){
         return;
     }
+    
     Map<String,Object> data = new HashMap<>();
     ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
     data.put("markets",markets);

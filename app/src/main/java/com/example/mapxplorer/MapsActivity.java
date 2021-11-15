@@ -70,7 +70,7 @@ public class MapsActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
 
         if (!isOnline(this)) {
-            Toast.makeText(this, "No Internet Connection\nPlease restart App", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Internet Connection\nPlease check Internet", Toast.LENGTH_LONG).show();
         }
         ValueEventListener listener = new ValueEventListener() {
             @Override

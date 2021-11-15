@@ -56,23 +56,6 @@ public class CategoryList extends AppCompatActivity {
 
         init();
         refresh();
-//        if(!DataBase.ActiveSessionUser.getName().equals("NULL")){
-//            for(Market market : DataBase.ActiveSessionUser.getMarkets()){
-//                if(DataBase.ActiveShowingMarket.getID().equals(market.getID())){
-//                    edit.setAlpha(1);
-//                    edit.setClickable(true);
-//                    break;
-//                }
-//                else {
-//                    edit.setAlpha(0);
-//                    edit.setClickable(false);
-//                }
-//            }
-//        }
-//        else {
-//            edit.setAlpha(0);
-//            edit.setClickable(false);
-//        }
     }
     private void init(){
         categories.clear();
@@ -86,6 +69,7 @@ public class CategoryList extends AppCompatActivity {
 
 
     public void edit() {
+        finish();
         startActivity(new Intent(this,EditCategory.class));
     }
 }
