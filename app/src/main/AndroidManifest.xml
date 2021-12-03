@@ -15,8 +15,12 @@
         android:theme="@style/Theme.MapXplorer"
         android:windowSoftInputMode="adjustPan">
         <activity
-            android:name=".EditCategory"
+            android:name=".MapsActivity"
             android:exported="false" />
+        <activity
+            android:name=".EditCategory"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".CategoryList"
             android:exported="false" />
@@ -35,16 +39,13 @@
         <activity
             android:name=".Edit"
             android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".Splash"
             android:exported="true"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.Design.Light.NoActionBar">

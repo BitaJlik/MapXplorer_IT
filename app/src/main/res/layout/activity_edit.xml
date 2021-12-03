@@ -36,13 +36,15 @@
         android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/add"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listEdit"
+        app:layout_constraintVertical_bias="1.0"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
         android:id="@+id/add"
-        android:layout_width="93dp"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginTop="72dp"
         android:onClick="add"
@@ -83,8 +85,8 @@
 
     <RadioGroup
         android:id="@+id/radioGroup"
-        android:layout_width="394dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="89dp"
         android:layout_marginBottom="3dp"
         android:orientation="horizontal"
@@ -106,10 +108,11 @@
             android:id="@+id/radioProduct"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:checked="true"
             android:clickable="true"
-            android:text="@string/product" />
+            android:text="@string/product"
+            android:focusable="true" />
 
         <RadioButton
             android:id="@+id/radioAmount"
@@ -124,12 +127,23 @@
             android:id="@+id/radioMarket"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="-8dp"
-            android:layout_weight="1"
+            android:layout_weight="0.9"
             android:clickable="true"
             android:focusable="true"
             android:text="@string/name_market" />
     </RadioGroup>
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="106dp"
+        android:layout_height="48dp"
+        android:text="@string/discount"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add"
+        app:layout_constraintVertical_bias="0.23" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

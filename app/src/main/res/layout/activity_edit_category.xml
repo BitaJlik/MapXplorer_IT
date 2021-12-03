@@ -1,73 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".EditCategory">
 
     <ListView
         android:id="@+id/listEdit"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:layout_height="450dp"/>
 
-    </ListView>
+   <LinearLayout
+       android:orientation="vertical"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+       <EditText
+           android:layout_gravity="center"
+           android:id="@+id/editInput"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:ems="10"
+           android:hint="@string/name_category"
+           android:inputType="textPersonName"
+           android:minHeight="48dp"
+           android:windowSoftInputMode="adjustPan"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="@+id/listEdit"
+           app:layout_constraintVertical_bias="0.0"
+           tools:ignore="SpeakableTextPresentCheck" />
 
-    <EditText
-        android:id="@+id/editInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="91dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="91dp"
-        android:layout_marginBottom="14dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:windowSoftInputMode="adjustPan"
-        app:layout_constraintBottom_toTopOf="@+id/add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        tools:ignore="SpeakableTextPresentCheck" />
+       <com.google.android.flexbox.FlexboxLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:flexDirection="row"
+           app:justifyContent="space_between"
+           android:orientation="horizontal"
+           tools:layout_editor_absoluteY="528dp">
 
-    <Button
-        android:id="@+id/add"
-        android:layout_width="93dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="OnClick" />
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toEndOf="@+id/add"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        tools:ignore="UsingOnClickInXml" />
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="72dp"
-        android:text="@string/delete"
-        app:layout_constraintEnd_toStartOf="@+id/add"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+           <Button
+               android:id="@+id/add"
+               android:layout_marginStart="10dp"
+               android:layout_width="wrap_content"
+               android:layout_height="48dp"
+               android:text="@string/add"
+               tools:ignore="OnClick" />
+
+           <Button
+               android:id="@+id/buttonEdit"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/edit"
+               tools:ignore="UsingOnClickInXml" />
+
+           <Button
+               android:layout_marginEnd="10dp"
+               android:id="@+id/delete"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="@string/delete" />
+       </com.google.android.flexbox.FlexboxLayout>
+   </LinearLayout>
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -30,6 +31,7 @@ public class Edit extends AppCompatActivity {
     RadioButton radioPrice;
     RadioButton radioAmount;
     RadioButton radioMarket;
+    CheckBox checkBox;
     Button edit;
     private int posItem = 0;
 
@@ -45,6 +47,7 @@ public class Edit extends AppCompatActivity {
         radioPrice = findViewById(R.id.radioPrice);
         radioAmount = findViewById(R.id.radioAmount);
         radioMarket = findViewById(R.id.radioMarket);
+        checkBox = findViewById(R.id.checkBox);
         input = findViewById(R.id.editInput);
         edit = findViewById(R.id.edit);
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
@@ -64,6 +67,7 @@ public class Edit extends AppCompatActivity {
             input.setText(DataBase.category.getProducts().get(posItem).getNameProduct());
             radioGroup.clearCheck();
             radioProduct.setChecked(true);
+            checkBox.setChecked(DataBase.category.getProducts().get(posItem).isDiscount());
         });
         listView.setAdapter(adapter);
         market = DataBase.category;
@@ -88,6 +92,11 @@ public class Edit extends AppCompatActivity {
 
     }
     public void edit(View view){
+        DataBase.auth.signInWithEmailAndPassword(DataBase.ActiveSessionUser.getEmail(),
+                DataBase.ActiveSessionUser.getPassword())
+                .addOnSuccessListener(authResult -> {
+
+                });
             if(market.getProducts().isEmpty()){
                 return;
             }
@@ -100,9 +109,7 @@ public class Edit extends AppCompatActivity {
             else if(radioAmount.isChecked()) {
                 market.getProducts().get(posItem).setAmount(Integer.parseInt(input.getText().toString()));
             }
-            else if(radioMarket.isChecked()){
-               // market.setNameMarket(input.getText().toString());
-            }
+            market.getProducts().get(posItem).setDiscount(checkBox.isChecked());
 
         String Uid = FirebaseAuth.getInstance().getUid();
         if(Uid == null){
@@ -122,17 +129,23 @@ public class Edit extends AppCompatActivity {
             return;
         }
         {
-            String Uid = FirebaseAuth.getInstance().getUid();
-            if(Uid == null){
-                return;
-            }
-            Map<String,Object> data = new HashMap<>();
-            Category category = DataBase.category;
-            category.getProducts().add(new Product(input.getText().toString(),0,0));
-            ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
-            data.put("markets",markets);
-            DataBase.reference.child(Uid).child("markets").removeValue();
-            DataBase.reference.child(Uid).updateChildren(data);
+            DataBase.auth.signInWithEmailAndPassword(DataBase.ActiveSessionUser.getEmail(),
+                    DataBase.ActiveSessionUser.getPassword())
+                    .addOnSuccessListener(authResult -> {
+                        String Uid = FirebaseAuth.getInstance().getUid();
+                        if(Uid == null){
+                            return;
+                        }
+                        Map<String,Object> data = new HashMap<>();
+                        Product product = new Product(input.getText().toString(),0,0);
+                        product.setDiscount(checkBox.isChecked());
+                        DataBase.category.getProducts().add(product);
+                        ArrayList<Market> markets = new ArrayList<>(DataBase.ActiveSessionUser.getMarkets());
+                        data.put("markets",markets);
+                        DataBase.reference.child(Uid).child("markets").removeValue();
+                        DataBase.reference.child(Uid).updateChildren(data);
+                    });
+
         }
         finish();
         Intent intent = new Intent(this,ShowProductsInMarket.class);

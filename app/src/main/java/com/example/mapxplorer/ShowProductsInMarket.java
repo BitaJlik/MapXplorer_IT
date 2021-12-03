@@ -8,19 +8,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.example.mapxplorer.Market.Category;
-import com.example.mapxplorer.Market.CategoryAdapter;
+import com.example.mapxplorer.Adatpers.ProductAdapter;
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.Market.Product;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -54,7 +49,7 @@ public class ShowProductsInMarket extends AppCompatActivity {
         sort =  findViewById(R.id.sort);
         recyclerView =  findViewById(R.id.rList);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this    );
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         RecyclerView.SimpleOnItemTouchListener simple = new RecyclerView.SimpleOnItemTouchListener();
 
         recyclerView.addOnItemTouchListener(simple);

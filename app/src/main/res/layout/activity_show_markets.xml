@@ -15,22 +15,23 @@
 
     <TextView
         android:id="@+id/nameMarket"
-        android:text="@string/testing_soon"
-        android:textSize="30sp"
         android:layout_width="190dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="4dp"
+        android:text="@string/testing_soon"
+        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/rList"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintVertical_bias="0.125" />
 
     <Button
         android:id="@+id/sort"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
+        android:textSize="11sp"
         android:onClick="sort"
         android:text="@string/sort_by_name"
         app:layout_constraintBottom_toTopOf="@+id/rList"
@@ -40,10 +41,11 @@
 
     <Button
         android:id="@+id/editE"
-        android:layout_width="70dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="116dp"
+        android:textSize="11sp"
         android:onClick="edit"
         android:text="@string/edit"
         app:layout_constraintBottom_toTopOf="@+id/rList"

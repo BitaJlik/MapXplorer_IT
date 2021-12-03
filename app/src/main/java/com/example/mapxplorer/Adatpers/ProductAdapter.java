@@ -1,29 +1,36 @@
-package com.example.mapxplorer;
+package com.example.mapxplorer.Adatpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mapxplorer.Market.Product;
+import com.example.mapxplorer.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder>  {
-    interface OnClickListener{
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> implements Filterable {
+    public interface OnClickListener{
         void onProductClick(Product product, int position);
     }
-    private OnClickListener onClickListener;
-    private List<Product> products;
+    private final OnClickListener onClickListener;
+    private final List<Product> products;
+    private final List<Product> productList;
     private static int change = 0;
     public ProductAdapter(List<Product> products,OnClickListener onClickListener){
         this.products = products;
         this.onClickListener = onClickListener;
+        this.productList = new ArrayList<>(products);
     }
 
     @NonNull
@@ -35,6 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
         View view = layoutInflater.inflate((change%2==0) ? R.layout.item : R.layout.item_colored,parent,false);
 
+
         return new ProductViewHolder(view);
     }
 
@@ -42,13 +50,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         holder.bind(products.get(position));
         Product product = products.get(position);
-
         holder.itemView.setOnClickListener(v -> {
             // вызываем метод слушателя, передавая ему данные
             onClickListener.onProductClick(product, position);
         });
     }
-
     @Override
     public int getItemCount() {
         return products.size();
@@ -69,8 +75,43 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         @SuppressLint("SetTextI18n")
         void bind(Product product){
             nameProduct.setText(product.getNameProduct());
+            if(product.isDiscount()) nameProduct.setTextColor(Color.RED);
             priceProduct.setText(product.getPrice() + "грн");
             amountProduct.setText(product.getAmount() + "шт");
         }
     }
+
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+    private final Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Product> filtered = new ArrayList<>();
+
+            if(constraint == null || constraint.length() == 0){
+                filtered.addAll(productList);
+            }else {
+                String stringPattern = constraint.toString().toLowerCase().trim();
+
+                for(Product product : productList){
+                    if(product.getNameProduct().toLowerCase().contains(stringPattern)){
+                        filtered.add(product);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filtered;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            products.clear();
+            products.addAll((List) results.values);
+            notifyDataSetChanged();
+        }
+    };
 }
+

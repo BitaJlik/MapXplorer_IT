@@ -15,6 +15,8 @@ import android.widget.SimpleAdapter;
 import com.example.mapxplorer.Market.Category;
 import com.example.mapxplorer.Market.Market;
 import com.example.mapxplorer.Market.Product;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -63,12 +65,15 @@ public class EditCategory extends AppCompatActivity {
         delete.setOnClickListener(v -> delete());
     }
     private void add() {
-        if(input.getText().toString().isEmpty()) return;
-        Category category = new Category();
-        category.setNameCategory(input.getText().toString());
-        categories.add(category);
-
-        refreshDB();
+        DataBase.auth.signInWithEmailAndPassword(DataBase.ActiveSessionUser.getEmail(),
+                DataBase.ActiveSessionUser.getPassword())
+                .addOnSuccessListener(authResult -> {
+                    if(input.getText().toString().isEmpty()) return;
+                    Category category = new Category();
+                    category.setNameCategory(input.getText().toString());
+                    categories.add(category);
+                    refreshDB();
+                });
     }
     private void edit() {
         if(category == null) return;

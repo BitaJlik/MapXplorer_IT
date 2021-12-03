@@ -55,12 +55,12 @@ public class LoginFragment extends Fragment {
         dialog.setNegativeButton("Cancel", (dialog1, which) -> dialog1.dismiss());
         dialog.setPositiveButton("Confirm", (dialogInterface, which) -> {
             if (TextUtils.isEmpty(email.toString())) {
-                Snackbar.make(constraintLayout, "Input email", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(constraintLayout, getStr(R.string.input_email), Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
             if (Objects.requireNonNull(password.getText()).toString().length() < 5) {
-                Snackbar.make(constraintLayout, "Input password more than 5 symbols", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(constraintLayout, getStr(R.string.password_less), Snackbar.LENGTH_SHORT).show();
                 return;
             }
             // LogIn User from DB
@@ -70,7 +70,7 @@ public class LoginFragment extends Fragment {
                     Objects.requireNonNull(email.getText()).toString(), password.getText().toString())
                     .addOnSuccessListener(authResult -> {
                         if (!Objects.requireNonNull(DataBase.auth.getCurrentUser()).isEmailVerified()) {
-                            Snackbar.make(constraintLayout, "Please, verify email", Snackbar.LENGTH_LONG).show();
+                            Snackbar.make(constraintLayout, getStr(R.string.verify_email), Snackbar.LENGTH_LONG).show();
                             return;
                         }
                         for (User user : DataBase.users) {
@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
                         MapsActivity.isViewMap = true;
                         MapsActivity.view.setCheckedItem(R.id.nav_Map);
                         getParentFragmentManager().beginTransaction().replace(R.id.fragment, MapsActivity.fragment).commit();
-                    }).addOnFailureListener(e -> Snackbar.make(constraintLayout, "Incorrect pass or email", Snackbar.LENGTH_LONG).show());
+                    }).addOnFailureListener(e -> Snackbar.make(constraintLayout, getStr(R.string.incorrect_login), Snackbar.LENGTH_LONG).show());
         });
         dialog.show();
     }
@@ -109,15 +109,15 @@ public class LoginFragment extends Fragment {
             // checking inputs
             {
                 if (TextUtils.isEmpty(email.toString())) {
-                    Snackbar.make(constraintLayout, "Input email", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(constraintLayout, getStr(R.string.input_email), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(name.toString())) {
-                    Snackbar.make(constraintLayout, "Input name", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(constraintLayout, getStr(R.string.input_name), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (Objects.requireNonNull(password.getText()).toString().length() < 5) {
-                    Snackbar.make(constraintLayout, "Input password more than 5 symbols", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(constraintLayout, getStr(R.string.password_less), Snackbar.LENGTH_SHORT).show();
                     return;
                 }
             }
@@ -134,11 +134,14 @@ public class LoginFragment extends Fragment {
                                 FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(user)
                                 .addOnSuccessListener(unused -> {
                                     Snackbar.make(constraintLayout,
-                                            "Success register\nVerify Email please", Snackbar.LENGTH_SHORT).show();
+                                            getStr(R.string.success_reg), Snackbar.LENGTH_SHORT).show();
                                     FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
                                 });
                     });
         });
         dialog.show();
+    }
+    public String getStr(int Id){
+        return requireContext().getString(Id);
     }
 }

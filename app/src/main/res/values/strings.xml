@@ -2,7 +2,7 @@
     <string name="app_name">ShowMeMoreShops</string>
     <string name="title_activity_maps">Xplorer</string>
     <string name="click">Try</string>
-    <string name="back">Назад</string>
+    <string name="back">Back</string>
     <string name="search">Search</string>
     <string name="add">Add</string>
     <string name="input_place">Input place</string>
@@ -39,6 +39,22 @@
     <string name="wait_a_second_and_go_to_map">if you dont see, wait a second, and go to map</string>
     <string name="image">image</string>
     <string name="satellite">Satellite</string>
-
+    <string name="discount">Discount?</string>
+    <string name="products">Products</string>
+    <string name="geolocation">GeoLocation</string>
+    <string name="find_me">Find Me</string>
+    <string name="name_category">category name</string>
+    <string name="name">Name</string>
+    <string name="please_login">Please LogIn</string>
+    <string name="gps_error">"Can`t find your location\nTurn on GPS or Internet</string>
+    <string name="verify_email">Please verify email</string>
+    <string name="incorrect_pass">Incorrect password</string>
+    <string name="incorrect_login">Incorrect pass or email</string>
+    <string name="input_email">Input email</string>
+    <string name="password_less">Input password more than 5 symbols</string>
+    <string name="success_reg">Success register\nVerify Email please</string>
+    <string name="switch_map">Please switch on map</string>
+    <string name="reached_max">Reached maximum limit markets \nPay for more :)</string>
+    <string name="no_internet">Немає з\'єднання\nПеревірте Wifi чи моб. дані</string>
 
 </resources>

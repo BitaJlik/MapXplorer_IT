@@ -29,11 +29,12 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
     @SuppressLint("StaticFieldLeak")
     private static Context thisContext;
     public static GoogleMap googleMap;
-
+    public static boolean onMarket = false;
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         setUpMapIfNeeded();
+        MapsActivity.setListener();
     }
 
     private void setUpMapIfNeeded() {
@@ -45,10 +46,13 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap) {
         MyCustomMapFragment.googleMap = googleMap;
 
-        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        if(MapsActivity.isSatellite){
+            MyCustomMapFragment.googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        }
+        else MyCustomMapFragment.googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         assert thisContext != null;
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(thisContext,R.raw.style_json));
@@ -58,12 +62,18 @@ public class MyCustomMapFragment extends SupportMapFragment implements OnMapRead
 
         // add marker on map by point
         googleMap.addMarker(markerOptions);
-        // focus on this point
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vinnitsa,16.0f));
         // add listener for opening shops
         googleMap.setOnGroundOverlayClickListener(this);
         // add circles from DB on map like markets
         drawMarkets();
+        // focus on this point
+        if(onMarket){
+            MyCustomMapFragment.googleMap.animateCamera(CameraUpdateFactory
+                    .newLatLngZoom(new LatLng(DataBase.ActiveShowingMarket.getLatitude(),
+                            DataBase.ActiveShowingMarket.getLongitude()),16.0f));
+            onMarket = false;
+        }
+        else googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(vinnitsa,16.0f));
     }
     public static void drawMarkets(){
         if(!DataBase.circles.isEmpty()){
