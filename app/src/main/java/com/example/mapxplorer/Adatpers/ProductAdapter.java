@@ -3,6 +3,7 @@ package com.example.mapxplorer.Adatpers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         change++;
 
         View view = layoutInflater.inflate((change%2==0) ? R.layout.item : R.layout.item_colored,parent,false);
-
+        if(change %2 ==0) change = 0;
 
         return new ProductViewHolder(view);
     }
@@ -51,7 +52,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.bind(products.get(position));
         Product product = products.get(position);
         holder.itemView.setOnClickListener(v -> {
-            // вызываем метод слушателя, передавая ему данные
             onClickListener.onProductClick(product, position);
         });
     }
@@ -70,12 +70,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             nameProduct = itemView.findViewById(R.id.productName);
             priceProduct = itemView.findViewById(R.id.productPrice);
             amountProduct = itemView.findViewById(R.id.productAmount);
+
+
         }
 
         @SuppressLint("SetTextI18n")
         void bind(Product product){
-            nameProduct.setText(product.getNameProduct());
-            if(product.isDiscount()) nameProduct.setTextColor(Color.RED);
+            nameProduct.setText(product.getNameProduct().trim());
+            if(product.isDiscount()){
+                priceProduct.setTextColor(Color.RED);
+                priceProduct.setTypeface(Typeface.DEFAULT_BOLD);
+            }
             priceProduct.setText(product.getPrice() + "грн");
             amountProduct.setText(product.getAmount() + "шт");
         }
@@ -106,6 +111,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             return results;
         }
 
+        @SuppressLint("NotifyDataSetChanged")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             products.clear();

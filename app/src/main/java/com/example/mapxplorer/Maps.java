@@ -2,6 +2,7 @@ package com.example.mapxplorer;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.mapxplorer.databinding.MapsActivityBinding;
@@ -20,14 +21,13 @@ public class Maps extends FragmentActivity implements OnMapReadyCallback {
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.fragment);
         if (mapFragment != null) mapFragment.getMapAsync(this);
     }
 
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NonNull GoogleMap googleMap) {
         Maps.googleMap = googleMap;
     }
 }

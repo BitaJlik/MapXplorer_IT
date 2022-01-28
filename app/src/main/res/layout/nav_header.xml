@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/header_title"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/teal_700"
+    android:background="@color/main_color"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
@@ -14,14 +14,17 @@
         android:id="@+id/image"
         android:layout_width="80dp"
         android:layout_height="80dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="8dp"
-        android:contentDescription="@string/image" />
+        android:background="@drawable/people"
+        android:contentDescription="@string/image"
+        tools:ignore="ImageContrastCheck" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/nameLoginUser"
             android:layout_width="178dp"
             android:layout_height="wrap_content"
@@ -29,10 +32,11 @@
             android:text="@string/name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:layout_marginStart="10dp"
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:scrollbarFadeDuration="250"
+            android:layout_marginStart="5dp"
             android:id="@+id/satellite"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content" />
 
 
@@ -41,18 +45,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/nameLoginEmail"
             android:layout_width="170dp"
             android:layout_height="match_parent"
             android:text="@string/email"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="73dp"
             android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:gravity="right"
+            android:layout_gravity="end"
+            android:gravity="end"
             android:text="@string/satellite" />
     </LinearLayout>
 

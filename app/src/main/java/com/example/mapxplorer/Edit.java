@@ -12,6 +12,7 @@ import android.widget.RadioGroup;
 import android.widget.SimpleAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mapxplorer.Market.Category;
 import com.example.mapxplorer.Market.Market;
@@ -50,6 +51,7 @@ public class Edit extends AppCompatActivity {
         checkBox = findViewById(R.id.checkBox);
         input = findViewById(R.id.editInput);
         edit = findViewById(R.id.edit);
+
         ArrayList<HashMap<String, String>> arrayList = new ArrayList<>();
         for(Product product : DataBase.category.getProducts()){
             HashMap<String, String> map = new HashMap<>();

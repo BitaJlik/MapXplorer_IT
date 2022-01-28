@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView android:id="@+id/card"
+    android:backgroundTint="@color/market_bg"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="match_parent">
 
-
+    <RelativeLayout
+        android:layout_marginTop="180dp"
+        android:background="@drawable/info_market"
+        android:layout_width="wrap_content"
+        android:layout_height="212dp"/>
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
         android:orientation="vertical">
 
 
@@ -26,15 +33,17 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:contentDescription="@string/image" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/nameMarket"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="Market"
+            android:text="@string/name_market"
             android:textSize="40sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,11 +52,12 @@
             app:layout_constraintVertical_bias="0.023" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/timeMarket"
             android:layout_width="140dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="openTime"
+            android:text="@string/title_activity_maps"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,30 +67,58 @@
             app:layout_constraintVertical_bias="0.033" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/contactInfoOwner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Owner"
+            android:text="@string/User"
             android:textSize="20sp" />
 
         <TextView
+            android:textColor="@color/white"
             android:id="@+id/contactInfoEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="email"
+            android:text="@string/email"
             android:textSize="20sp" />
 
-        <Button
-            android:layout_gravity="center"
-            android:id="@+id/toProducts"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/to_products" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <com.google.android.material.button.MaterialButton
+                android:layout_weight="1"
+                android:id="@+id/toCategories"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/button_green_blue"
+                app:cornerRadius="15dp"
+                android:textColor="@color/white"
+                android:layout_marginEnd="5dp"
+                android:text="@string/to_products" />
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                android:id="@+id/expand_button"
+                app:cornerRadius="15dp"
+                android:layout_width="0dp"
+                android:backgroundTint="@color/button_green_blue"
+                android:textColor="@color/white"
+                android:layout_height="48dp"
+                android:text="@string/comment" />
+        </LinearLayout>
 
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="20dp"
+            android:id="@+id/rv_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

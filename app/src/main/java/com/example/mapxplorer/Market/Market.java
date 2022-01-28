@@ -3,15 +3,21 @@ package com.example.mapxplorer.Market;
 import android.media.Image;
 import android.widget.ImageView;
 
+import com.example.mapxplorer.DataBase;
 import com.example.mapxplorer.R;
+import com.example.mapxplorer.User.Comment;
 import com.example.mapxplorer.User.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 public class Market {
     public enum SizeMarket {SMALL,MEDIUM,LARGE,BIG}
 
     private String nameMarket;
     private ArrayList<Category> categories;
+    private ArrayList<Comment> comments;
     private double latitude;
     private double longitude;
     private String owner;
@@ -19,9 +25,12 @@ public class Market {
     private String openTime;
     private Image image;
     private SizeMarket sizeMarket;
+    private String userUid;
 
     public Market(){
+        userUid = FirebaseAuth.getInstance().getUid();
         categories = new ArrayList<>();
+        comments = new ArrayList<>();
     }
 
     public Market(String nameMarket, double latitude, double longitude) {
@@ -29,6 +38,8 @@ public class Market {
         this.latitude = latitude;
         this.longitude = longitude;
         categories = new ArrayList<>();
+        comments = new ArrayList<>();
+
     }
 
     public String getNameMarket() { return nameMarket; }
@@ -50,6 +61,10 @@ public class Market {
     public void setSizeMarket(SizeMarket sizeMarket) { this.sizeMarket = sizeMarket; }
     public ArrayList<Category> getCategories() { return categories; }
     public void setCategories(ArrayList<Category> categories) { this.categories = categories; }
+    public ArrayList<Comment> getComments(){ return comments;}
+    public void setComments(ArrayList<Comment> comments){ this.comments = comments; }
+    public String getUserUid() { return userUid; }
+    public void setUserUid(String userUid) { this.userUid = userUid; }
 
     @Override public String toString() {
         return "Market{" +

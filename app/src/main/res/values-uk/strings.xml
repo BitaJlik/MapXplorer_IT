@@ -15,7 +15,6 @@
     <string name="product">Продукт</string>
     <string name="price">Ціна</string>
     <string name="amount">Кіль-сть</string>
-    <string name="img">img</string>
     <string name="delete">Видалити</string>
     <string name="name_market">Магазин</string>
     <string name="search_this">Шукайте тут</string>
@@ -27,7 +26,7 @@
     <string name="register">Реєстрація</string>
     <string name="input_name_market">Ім\'я магазину</string>
     <string name="Viewer">Viewer</string>
-    <string name="to_products">Перейти до Категорій</string>
+    <string name="to_products">Категорії</string>
     <string name="map">Карта</string>
     <string name="list">Магазини</string>
     <string name="exit">Вийти</string>
@@ -57,5 +56,22 @@
     <string name="switch_map">Перейдіть до карти</string>
     <string name="reached_max">Досягнуто максимальну кількість магазинів\nЗаплатіть для збільшення :)</string>
     <string name="no_internet">Немає з\'єднання\nПеревірте Wifi чи моб. дані</string>
-
+    <string name="cancel">Відміна</string>
+    <string name="undo">Відміна?</string>
+    <string name="save">Зберегти</string>
+    <string name="forgot_pass">Забули пароль?</string>
+    <string name="comment">Коментар</string>
+    <string name="send_on_email">Відправлено на пошту</string>
+    <string name="settings">Налаштування</string>
+    <string name="other">Інше</string>
+    <string name="dark_theme">Нічна тема</string>
+    <string name="aboutDev">Про розробників</string>
+    <string name="dark">Нічна тема</string>
+    <string name="liked">Вам сподобалось</string>
+    <string name="warned">Вам не сподобалось</string>
+    <string name="type_comment">Утримуйте для більшого</string>
+    <string name="edit_comment">Змініть коментарій</string>
+    <string name="img">Зображення</string>
+    <string name="gps_error_wait">Геолокація не знайдена, спробуйте пізніше</string>
+    <string name="edit_this">Змініть це</string>
 </resources>

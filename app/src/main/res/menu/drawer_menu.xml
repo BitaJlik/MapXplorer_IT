@@ -15,7 +15,7 @@
 
         <item
             android:id="@+id/nav_Product"
-            android:icon="@drawable/img"
+            android:icon="@drawable/search"
             android:title="@string/products" />
     </group>
     <item android:title="@string/User">
@@ -27,6 +27,7 @@
                     android:title="@string/login" />
                 <item
                     android:id="@+id/add"
+                    android:checkable="false"
                     android:icon="@drawable/ic_round_add_business_24"
                     android:title="@string/add_market" />
             </group>
@@ -36,9 +37,19 @@
     <item android:title="@string/geolocation">
         <menu>
             <item
+                android:checkable="false"
                 android:id="@+id/findMe"
                 android:icon="@drawable/ic_baseline_my_location_24"
                 android:title="@string/find_me" />
+        </menu>
+    </item>
+    <item android:title="@string/other">
+        <menu>
+            <item
+                android:checkable="true"
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/settings"
+                android:title="@string/settings" />
         </menu>
     </item>
     <item android:title="@string/exit">

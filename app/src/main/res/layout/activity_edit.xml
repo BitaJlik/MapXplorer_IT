@@ -1,149 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:alpha="1"
     android:windowSoftInputMode="adjustPan"
-    tools:context=".Edit">
+    tools:context=".Market.Edit"
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/listEdit"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rview"
         android:layout_width="match_parent"
-        android:layout_height="450dp"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        tools:listitem="@layout/item"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
-
-    </ListView>
-
-    <EditText
-        android:id="@+id/editInput"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="91dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="91dp"
-        android:layout_marginBottom="14dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:windowSoftInputMode="adjustPan"
-        app:layout_constraintBottom_toTopOf="@+id/add"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.473"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        app:layout_constraintVertical_bias="1.0"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <Button
-        android:id="@+id/add"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="72dp"
-        android:onClick="add"
-        android:text="@string/add"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="OnClick" />
-
-    <Button
-        android:id="@+id/buttonEdit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="72dp"
-        android:onClick="edit"
-        android:text="@string/edit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.384"
-        app:layout_constraintStart_toEndOf="@+id/add"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit"
-        tools:ignore="UsingOnClickInXml" />
-
-    <Button
-        android:id="@+id/delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="72dp"
-        android:onClick="delete"
-        android:text="@string/delete"
-        app:layout_constraintEnd_toStartOf="@+id/add"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listEdit" />
-
-    <RadioGroup
-        android:id="@+id/radioGroup"
+    <LinearLayout
+        android:id="@+id/linear"
+        android:gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="89dp"
-        android:layout_marginBottom="3dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add">
+        android:layout_height="60dp">
 
-        <RadioButton
-            android:id="@+id/radioPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/price" />
+        <com.google.android.material.button.MaterialButton
+            android:text="@string/add"
+            app:cornerRadius="10dp"
+            android:backgroundTint="@color/button_green_blue"
+            android:id="@+id/add"
+            android:layout_margin="2dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
-        <RadioButton
-            android:id="@+id/radioProduct"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:checked="true"
-            android:clickable="true"
-            android:text="@string/product"
-            android:focusable="true" />
+                  </LinearLayout>
 
-        <RadioButton
-            android:id="@+id/radioAmount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/amount" />
-
-        <RadioButton
-            android:id="@+id/radioMarket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.9"
-            android:clickable="true"
-            android:focusable="true"
-            android:text="@string/name_market" />
-    </RadioGroup>
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        android:layout_width="106dp"
-        android:layout_height="48dp"
-        android:text="@string/discount"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add"
-        app:layout_constraintVertical_bias="0.23" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

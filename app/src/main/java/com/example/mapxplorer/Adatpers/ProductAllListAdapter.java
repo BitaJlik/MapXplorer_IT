@@ -40,7 +40,7 @@ public class ProductAllListAdapter extends RecyclerView.Adapter<ProductAllListAd
         change++;
 
         View view = layoutInflater.inflate((change%2==0) ? R.layout.item : R.layout.item_colored,parent,false);
-
+        if(change % 2 == 0) change = 0 ;
 
         return new ProductViewHolder(view);
     }

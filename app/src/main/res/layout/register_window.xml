@@ -4,59 +4,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardElevation="10dp">
-
+    app:cardElevation="3dp">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/register_bg"/>
     <LinearLayout
+        android:layout_gravity="center"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
         <com.rengwuxian.materialedittext.MaterialEditText
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/emailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/emailInput"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:text=""
-            android:textColor="#333"
-            android:textColorHint="@color/black"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="20sp"
+            app:met_baseColor="@color/white"
             app:met_floatingLabel="highlight"
-            app:met_baseColor="#0056d3"
-            app:met_primaryColor="#982360"
-            app:met_singleLineEllipsis="true"
-            />
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true" />
+
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/nameInput"
-            android:hint="@string/input_name"
-            android:inputType="textPassword"
-            android:text=""
-            android:textColor="#333"
-            android:textColorHint="@color/black"
-            android:textSize="20sp"
-            app:met_floatingLabel="highlight"
-            app:met_baseColor="#0056d3"
-            app:met_primaryColor="#982360"
-            app:met_singleLineEllipsis="true"
-            />
-        <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="@string/input_name"
+            android:inputType="text"
+            android:text=""
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="20sp"
+            app:met_baseColor="@color/white"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true" />
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/passwordInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
             android:text=""
-            android:textColor="#333"
-            android:textColorHint="@color/black"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="20sp"
+            app:met_baseColor="@color/white"
             app:met_floatingLabel="highlight"
-            app:met_baseColor="#0056d3"
-            app:met_primaryColor="#982360"
-            app:met_singleLineEllipsis="true"
-            />
+            app:met_primaryColor="@color/white"
+            app:met_singleLineEllipsis="true" />
+
+        <com.google.android.material.button.MaterialButton
+            app:cornerRadius="14dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#235E58"
+            android:text="@string/register"
+            android:id="@+id/btn_register"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
 
     </LinearLayout>

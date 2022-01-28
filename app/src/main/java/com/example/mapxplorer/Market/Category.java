@@ -10,4 +10,12 @@ public class Category {
     public void setNameCategory(String nameCategory) { this.nameCategory = nameCategory; }
     public ArrayList<Product> getProducts() { return products; }
     public void setProducts(ArrayList<Product> products) { this.products = products; }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "products=" + products +
+                ", nameCategory='" + nameCategory + '\'' +
+                '}';
+    }
 }

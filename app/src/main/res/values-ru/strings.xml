@@ -15,7 +15,6 @@
     <string name="product">Продукт</string>
     <string name="price">Цена</string>
     <string name="amount">Кол-во</string>
-    <string name="img">img</string>
     <string name="delete">Удалить</string>
     <string name="name_market">Магазин</string>
     <string name="search_this">Ищите здесь</string>
@@ -27,7 +26,7 @@
     <string name="register">Регистрация</string>
     <string name="input_name_market">Имя магазина</string>
     <string name="Viewer">Viewer</string>
-    <string name="to_products">К категориям!</string>
+    <string name="to_products">Категории</string>
     <string name="map">Карта</string>
     <string name="list">Магазины</string>
     <string name="exit">Выйти</string>
@@ -57,5 +56,22 @@
     <string name="switch_map">Переключитесь на карту</string>
     <string name="reached_max">Достигнутое максимальное количество магазинов\nДля увеличения платите :)</string>
     <string name="no_internet">Нет подключения к интернету\nПроверьте WI-FI или моб. данные</string>
-
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="undo">Отменить?</string>
+    <string name="forgot_pass">Забыли пароль?</string>
+    <string name="comment">Комментарий</string>
+    <string name="send_on_email">Отправлено на почту</string>
+    <string name="settings">Настройки</string>
+    <string name="other">Другое</string>
+    <string name="dark_theme">Тёмная тема</string>
+    <string name="aboutDev">Про разработчиков</string>
+    <string name="dark">Тёмная тема</string>
+    <string name="liked">Вам понравилось</string>
+    <string name="warned">Вам не понравилось</string>
+    <string name="type_comment">Удерживайте для большего</string>
+    <string name="edit_comment">Измените комментарий</string>
+    <string name="img">Изображение</string>
+    <string name="gps_error_wait">Геолокация не определена, попробуйте позже</string>
+    <string name="edit_this">Измените это</string>
 </resources>

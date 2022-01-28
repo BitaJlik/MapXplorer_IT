@@ -1,67 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".EditCategory">
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/listEdit"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="450dp"/>
+        android:layout_height="match_parent">
+        <ListView
+            android:layout_weight="1"
+            android:id="@+id/listEdit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
-   <LinearLayout
-       android:orientation="vertical"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent">
-       <EditText
-           android:layout_gravity="center"
-           android:id="@+id/editInput"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:ems="10"
-           android:hint="@string/name_category"
-           android:inputType="textPersonName"
-           android:minHeight="48dp"
-           android:windowSoftInputMode="adjustPan"
-           app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintStart_toStartOf="parent"
-           app:layout_constraintTop_toTopOf="@+id/listEdit"
-           app:layout_constraintVertical_bias="0.0"
-           tools:ignore="SpeakableTextPresentCheck" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-       <com.google.android.flexbox.FlexboxLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           app:flexDirection="row"
-           app:justifyContent="space_between"
-           android:orientation="horizontal"
-           tools:layout_editor_absoluteY="528dp">
+            <EditText
+                android:layout_gravity="center"
+                android:id="@+id/editInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/name_category"
+                android:inputType="text"
+                android:minHeight="48dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/listEdit"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="SpeakableTextPresentCheck" />
 
-           <Button
-               android:id="@+id/add"
-               android:layout_marginStart="10dp"
-               android:layout_width="wrap_content"
-               android:layout_height="48dp"
-               android:text="@string/add"
-               tools:ignore="OnClick" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-           <Button
-               android:id="@+id/buttonEdit"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/edit"
-               tools:ignore="UsingOnClickInXml" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    app:cornerRadius="10dp"
+                    android:backgroundTint="@color/button_green_blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="@string/add" />
 
-           <Button
-               android:layout_marginEnd="10dp"
-               android:id="@+id/delete"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="@string/delete" />
-       </com.google.android.flexbox.FlexboxLayout>
-   </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonEdit"
+                    android:layout_weight="1"
+                    app:cornerRadius="10dp"
+                    android:backgroundTint="@color/button_green_blue"
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit" />
 
-</LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:layout_marginEnd="10dp"
+                    app:cornerRadius="10dp"
+                    android:backgroundTint="@color/button_green_blue"
+                    android:layout_weight="1"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>
