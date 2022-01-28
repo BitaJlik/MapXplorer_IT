@@ -1,4 +1,4 @@
-package com.example.mapxplorer.Market;
+package com.example.mapxplorer.Adatpers;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,18 +9,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.mapxplorer.Market.Category;
 import com.example.mapxplorer.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>  {
     public interface OnClickListener{
         void onProductClick(Category category, int position);
     }
-    private OnClickListener onClickListener;
-    private List<Category> categories;
+    private final OnClickListener onClickListener;
+    private final ArrayList<Category> categories;
     private static int change = 0;
-    public CategoryAdapter(List<Category> categories, OnClickListener onClickListener){
+    public CategoryAdapter(ArrayList<Category> categories, OnClickListener onClickListener){
         this.categories = categories;
         this.onClickListener = onClickListener;
     }
@@ -30,7 +34,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater  = LayoutInflater.from(context);
-        change++;
 
         View view = layoutInflater.inflate( R.layout.category_item,parent,false);
 
@@ -43,7 +46,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         Category category = categories.get(position);
 
         holder.itemView.setOnClickListener(v -> {
-            // вызываем метод слушателя, передавая ему данные
             onClickListener.onProductClick(category, position);
         });
     }

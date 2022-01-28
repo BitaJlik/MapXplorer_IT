@@ -1,4 +1,4 @@
-package com.example.mapxplorer;
+package com.example.mapxplorer.Market;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mapxplorer.Adatpers.ProductAllListAdapter;
-import com.example.mapxplorer.Market.Category;
-import com.example.mapxplorer.Market.Market;
-import com.example.mapxplorer.Market.Product;
+import com.example.mapxplorer.DataBase;
+import com.example.mapxplorer.MainActivity;
+import com.example.mapxplorer.R;
 
 import java.util.ArrayList;
 
@@ -27,9 +28,8 @@ public class ProductList extends Fragment {
     RecyclerView recyclerView;
     SearchView searchView;
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("Creating", "ProductList");
         View view = inflater.inflate(R.layout.activity_product_list, container, false);
-        searchView = MapsActivity.search;
+        searchView = MainActivity.search;
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -49,9 +49,9 @@ public class ProductList extends Fragment {
                 for (Market market : DataBase.getAllMarkets()) {
                     for (Category category : market.getCategories()) {
                         for (Product p : category.getProducts()) {
-                            Log.d("TEST", p.toString());
-                            Log.d("TEST",product.toString());
-                            if (p == product) {
+                            Log.i("TEST", p.toString());
+                            Log.i("TEST",product.toString());
+                            if (p.equals(product)) {
                                 DataBase.ActiveShowingMarket = market;
                                 break ss;
                             }
@@ -59,7 +59,7 @@ public class ProductList extends Fragment {
                     }
                 }
             }
-            startActivity(new Intent(getContext(),CategoryList.class));
+            startActivity(new Intent(getContext(), CategoryList.class));
         };
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -67,6 +67,7 @@ public class ProductList extends Fragment {
 
         recyclerView.addOnItemTouchListener(simple);
         recyclerView.setLayoutManager(layoutManager);
+
         initialize();
         return view;
     }
