@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MapXplorer.Day" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Primary brand color. -->
         <item name="fontFamily">@font/montserrat</item>
         <item name="colorPrimary">@color/main_invert</item>
@@ -14,7 +15,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
-    <style name="Theme.MapXplorer.Night" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.MapXplorer.Night" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/main_invert</item>
         <item name="colorPrimaryVariant">@color/black</item>
@@ -28,6 +30,7 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

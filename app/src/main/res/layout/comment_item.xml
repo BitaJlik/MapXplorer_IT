@@ -51,7 +51,7 @@
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:textColor="@color/black_white" />
+                android:textColor="@color/white" />
 
             <EditText
                 android:id="@+id/edit_comment"
@@ -60,7 +60,7 @@
                 android:autofillHints=""
                 android:hint="@string/type_comment"
                 android:inputType="text"
-                android:textColor="@color/black_white"
+                android:textColor="@color/white"
                 android:visibility="gone" />
         </LinearLayout>
 

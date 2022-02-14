@@ -45,9 +45,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         holder.bind(categories.get(position));
         Category category = categories.get(position);
 
-        holder.itemView.setOnClickListener(v -> {
-            onClickListener.onProductClick(category, position);
-        });
+        holder.itemView.setOnClickListener(v -> onClickListener.onProductClick(category, position));
     }
 
     @Override

@@ -25,7 +25,6 @@ public class ProductAllListAdapter extends RecyclerView.Adapter<ProductAllListAd
     private final OnClickListener onClickListener;
     private final List<Product> products;
     private final List<Product> productList;
-    private static int change = 0;
     public ProductAllListAdapter(List<Product> products,OnClickListener onClickListener){
         this.products = products;
         this.onClickListener = onClickListener;
@@ -37,10 +36,8 @@ public class ProductAllListAdapter extends RecyclerView.Adapter<ProductAllListAd
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater layoutInflater  = LayoutInflater.from(context);
-        change++;
 
-        View view = layoutInflater.inflate((change%2==0) ? R.layout.item : R.layout.item_colored,parent,false);
-        if(change % 2 == 0) change = 0 ;
+        View view = layoutInflater.inflate(R.layout.item,parent,false);
 
         return new ProductViewHolder(view);
     }

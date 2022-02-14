@@ -150,7 +150,6 @@ public class Edit extends AppCompatActivity  {
         Map<String, Object> data = new HashMap<>();
         data.put(Uid, DataBase.ActiveSessionUser);
         System.out.println(DataBase.category);
-        System.out.println(data);
         DataBase.reference.child(Uid).removeValue();
         DataBase.reference.updateChildren(data);
         adapter = new RvProductAdapter(this, DataBase.ActiveShowingMarket.getCategories().get(DataBase.posCategory).getProducts());

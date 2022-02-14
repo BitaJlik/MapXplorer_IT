@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @SuppressLint("StaticFieldLeak") public static Toolbar toolbar;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
-
         window = getWindow();
         window.setStatusBarColor(getResources().getColor(R.color.main_color));
         super.onCreate(savedInstanceState);
@@ -99,19 +98,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     .show();
         }
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("++");
+            }
+        });
         search = toolbar.findViewById(R.id.search);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
 
         view = findViewById(R.id.nav_view);
+
         view.setNavigationItemSelectedListener(this);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override public void onDrawerSlide(@NonNull View drawerView, float slideOffset) { }
+            @Override public void onDrawerOpened(@NonNull View drawerView) { }
+            @Override public void onDrawerClosed(@NonNull View drawerView) { }
+            @Override public void onDrawerStateChanged(int newState) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                search.onActionViewCollapsed();
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        });
         drawer.addDrawerListener(toggle);
 
         view.setCheckedItem(R.id.nav_Map);
+
         toggle.syncState();
         onNavigationItemSelected(view.getMenu().findItem(R.id.nav_Map));
         name = view.getHeaderView(0).findViewById(R.id.nameLoginUser);
